@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="3" />
+<title>Index</title>
+<style>
+body {
+	font-family: 'Open Sans', sans-serif;
+	color: #394b4b;
+	background-color: #f8f8ff;
+	text-align: justify;
+	margin: 0 0 0 0;
+	border-top: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Droid Serif', serif;
+	color: rgb(46, 116, 181);
+}
+
+header {
+	background-color: #7fdbff;
+	min-height: 90px;
+}
+
+header img {
+	height: 90px;
+	float: left;
+	margin-right: 1em;
+}
+
+header h1, header h2 {
+	margin: 0;
+	padding: 5px 0 0 0;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 100%;
+}
+
+tr:hover {
+	background-color: #f5f5f5;
+}
+
+th, td {
+	border: 1px solid rgb(40%, 40%, 40%);
+	padding: 2px 0.5em;
+	height: 50px;
+}
+
+footer {
+	clear: both;
+	background-color: #7fdbff;
+	padding: 1em 0.5em;
+}
+
+footer p, footer time {
+	display: inline;
+	margin-right: 20px;
+	font-weight: bold;
+}
+
+#main {
+	padding: 30px;
+}
+</style>
+</head>
+<body>
+	<h1>Votations live broadcast</h1>
+	<div id="main">
+		<h2 class="header"></h2>
+		<table>
+			<tr>
+				<th>Number</th>
+				<th>Votes</th>
+				<th>Proposal</th>
+				<th>Topic</th>
+			</tr>
+			<tr th:each="proposal,iterationStatus  : ${proposals}">
+				<td th:text="${iterationStatus.count}">1</td>
+				<td th:text="${proposal.getValue().getNumberOfVotes()}"></td>
+				<td><a th:text="${proposal.getValue().getTitle()}"
+					th:href="@{viewProposal?(proposalId=${proposal.getValue().getId()})}" /></td>
+				<td th:text="${proposal.getValue().getTopic()}"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

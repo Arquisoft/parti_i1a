@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Login</title>
+<style>
+body {
+	margin-top: 100px;
+}
+
+#loginForm {
+	margin: auto;
+	width: 50%;
+	border: 1px solid rgb(46, 116, 181);
+	padding: 10px;
+	max-width: 300px;
+}
+
+p {
+	padding: 5px;
+}
+
+#username {
+	float: right;
+}
+
+#password {
+	float: right;
+}
+
+#submit {
+	margin: auto;
+	width: 49%;
+	border: 1px solid rgb(46, 116, 181);
+	padding: 10px;
+}
+
+#reset {
+	margin: auto;
+	width: 49%;
+	border: 1px solid rgb(46, 116, 181);
+	padding: 10px;
+}
+</style>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div id="loginForm" class="loginForm">
+		<form action="#" th:action="@{/login}" th:object="${credentials}"
+			method="post">
+			<p>
+				Username: <input id="username" type="text" th:field="*{username}" />
+			</p>
+			<p>
+				Password: <input id="password" type="password"
+					th:field="*{password}" />
+			</p>
+			<p>
+				<input id="submit" type="submit" value="Submit" /> <input
+					id="reset" type="reset" value="Reset" />
+			</p>
+		</form>
+	</div>
+</body>
+</html>
