@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import asw.hello.Application;
-import asw.persistence.model.Comment;
-import asw.persistence.model.Proposal;
-import asw.producers.MockGenerator;
+import uniovi.asw.hello.Application;
+import uniovi.asw.persistence.model.Comment;
+import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.producers.MockGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)

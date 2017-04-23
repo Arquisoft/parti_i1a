@@ -20,11 +20,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
-import asw.hello.MainController;
 import cucumber.api.java.en.But;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import uniovi.asw.hello.MainController;
 
 @SuppressWarnings({"deprecation","unused"})
 public class ProposalSteps {

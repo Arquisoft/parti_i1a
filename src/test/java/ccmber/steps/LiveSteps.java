@@ -14,13 +14,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Assert;
 import org.springframework.web.context.WebApplicationContext;
 
-import asw.hello.Application;
-
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import uniovi.asw.hello.Application;
 
 @SuppressWarnings("deprecation")
 @ContextConfiguration(classes=Application.class, loader=SpringApplicationContextLoader.class)

@@ -4,11 +4,11 @@ import java.util.Date;
 
 import org.junit.experimental.theories.DataPoint;
 
-import asw.persistence.model.Comment;
-import asw.persistence.model.Proposal;
-import asw.persistence.model.User;
-import asw.persistence.model.Vote;
-import asw.persistence.model.VoteType;
+import uniovi.asw.persistence.model.Comment;
+import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.persistence.model.User;
+import uniovi.asw.persistence.model.Vote;
+import uniovi.asw.persistence.model.VoteType;
 
 public class EqualityTest extends ObjectTheories{
 	
