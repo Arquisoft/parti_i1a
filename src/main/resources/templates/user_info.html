@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>User info</title>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1" />
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+  	<div class="table-responsive">
+	    <table class="table table-striped">
+	      <tr>
+	        <td id="name_label">Name:</td><td><p id="name" th:text="${user.name}"/></td>
+	      </tr>
+	      <tr>
+	        <td id="surname_label">Surname:</td><td><p id="surname" th:text="${user.surname}"/></td>
+	      </tr>
+	      <tr>
+	        <td id="email_label">Email:</td><td><p id="email" th:text="${user.email}"/></td>
+	      </tr>
+	      <tr>
+	        <td id="birth_label">Date of birth:</td><td><p id="birth" th:text="${user.birthDate==null?'':#dates.format(user.birthDate, 'dd-MM-yyyy')}"/></td>
+	      </tr>
+	      <tr>
+	        <td id="address_label">Address:</td><td><p id="address" th:text="${user.address}"/></td>
+	      </tr>
+	      <tr>
+	        <td id="nationality_label">Nationality:</td><td><p id="nationality" th:text="${user.DNI}"/></td>
+	      </tr>
+	    </table>
+    </div>
+    <form action="change_password">
+		<input type="submit" value="Change" />
+	</form>
+    <a href="/">Logout</a>
+  </body>
+</html>

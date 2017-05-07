@@ -36,7 +36,12 @@ public class UserServiceImpl implements UserService{
 		}
 		return users;
 	}
-
+	
+	@Override
+	public User findByEmail(String email) {
+		return getRepository().findByEmail(email);
+	}
+	
 	@Override
 	public boolean checkExists(Long id) {
 		return getRepository().findOne(id) != null;
@@ -49,5 +54,7 @@ public class UserServiceImpl implements UserService{
 	private UserRepository getRepository(){
 		return this.repository;
 	}
+
+
 
 }
