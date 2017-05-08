@@ -55,6 +55,8 @@ public class UserServiceImpl implements UserService{
 		return this.repository;
 	}
 
-
-
+	@Override
+	public User findLoggableUser(String login, String password) {
+		return getRepository().findLoggableUser(login, password);
+	}
 }

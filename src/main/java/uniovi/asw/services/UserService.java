@@ -10,4 +10,5 @@ public interface UserService {
 	boolean checkExists(Long id);
 	List<User> findAll();
 	User findByEmail(String email);
+	User findLoggableUser(String login, String password);
 }
