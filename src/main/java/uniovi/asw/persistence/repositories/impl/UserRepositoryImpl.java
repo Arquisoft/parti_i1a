@@ -1,4 +1,4 @@
-package uniovi.asw.persistence.respositories.impl;
+package uniovi.asw.persistence.repositories.impl;
 
 import java.util.List;
 

@@ -41,7 +41,7 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	private Set<Comment> comments = new HashSet<Comment>();
-
+	
 	public User(String name, String surname, String password, String email, String nationality, String DNI,
 			String address, Date birthDate) {
 		super();
