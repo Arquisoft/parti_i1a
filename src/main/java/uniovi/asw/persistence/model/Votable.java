@@ -71,7 +71,7 @@ public abstract class Votable {
         }
     }
 
-    public int getScore() {
+    public int calculateScore() {
         process();
         int number = upvotes - downvotes;
         return number;

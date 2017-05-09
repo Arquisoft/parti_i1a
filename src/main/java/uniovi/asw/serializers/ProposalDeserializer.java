@@ -25,7 +25,6 @@ public class ProposalDeserializer implements Deserializer<Proposal> {
 	try {
 	    proposal = mapper.readValue(arg1, Proposal.class);
 	} catch (Exception e) {
-
 	    e.printStackTrace();
 	}
 	return proposal;

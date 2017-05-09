@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import uniovi.asw.hello.Application;
 import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.model.VoteMaker;
@@ -66,6 +65,7 @@ public class KafkaTest {
 
 	@Test
 	public void testMessages() throws Exception {
+		
 		// Test messaging
 		expectedMessages.add("TestVote1");
 		expectedMessages.add("TestVote2");
