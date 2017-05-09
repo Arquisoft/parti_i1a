@@ -1,0 +1,129 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Seing Proposal</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<h1 class="text-primary text-center" th:text="${p.getTitle()}">
+				</h1>
+				<div class="row">
+					<div class="col-md-5">
+						<h3>Proposal description:</h3>
+						<h5 th:text="${p.getDescription()}"></h5>
+					</div>
+					<div class="col-md-1"></div>
+					<div class="col-md-5">
+						<h3>Votes</h3>
+						<div th:with="idProposal=${p.getId()}">
+							<table id="votesTable" class="table">
+								<thead>
+									<tr>
+										<th class="text-center">
+											<h4>
+												<b>Likes</b>
+											</h4>
+										</th>
+										<th class="text-center">
+											<h4>
+												<b>Dislikes</b>
+											</h4>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="text-center" th:text="${p.getUpvotes()}"
+											id="upVotes"></td>
+										<td class="text-center" th:text="${p.getDownvotes()}"
+											id="downVotes"></td>
+									</tr>
+									<tr>
+										<td><a th:href="${'/upvoteProposal/'+ idProposal}"
+											class="btn btn-block btn-lg btn-success" id="upvote"> <span
+												class="glyphicon glyphicon-thumbs-up"></span></a></td>
+										<td><a th:href="${'/downvoteProposal/' + idProposal}"
+											class="btn btn-block btn-lg btn-danger" id="downvote"> <span
+												class="glyphicon glyphicon-thumbs-down"></span></a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Comments:</h3>
+						<div>
+							<table class="table">
+								<tr th:each="c : ${p.getComments()}">
+									<div>
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<span class="text-muted"
+													th:text="${c.getUser().getFirstName() + &quot; &quot; 
+													+ c.getUser().getLastName()}"></span>
+											</div>
+											<div class="panel-body">
+												<p th:text="${c.getContent()}"></p>
+											</div>
+										</div>
+									</div>
+									<div>
+										<table class="table"
+											th:with="idComment=${c.getId()} , idProposal=${p.getId()} ">
+											<tbody>
+												<tr>
+													<td><a
+														th:href="${'/upvoteComment/'+ idProposal +'/'+idComment}"
+														class="btn btn-xs btn-success"
+														th:id="${idComment+'upVote'}"><span
+															class="glyphicon glyphicon-thumbs-up"></span> </a></td>
+													<td class="text-center" th:text="${c.getUpvotes()}"
+														th:id="${idComment+'upVotes'}"></td>
+												</tr>
+												<tr>
+													<td><a
+														th:href="${'/downvoteComment/'+ idProposal +'/'+idComment}"
+														class="btn btn-xs btn-danger"><span
+															class="glyphicon glyphicon-thumbs-down"
+															th:id="${idComment+'downVote'}"></span> </a></td>
+													<td class="text-center" th:text="${c.getDownvotes()}"
+														th:id="${idComment+'downVotes'}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="col-md-6" th:with="idProposal=${p.getId()}">
+						<h3>New Comment</h3>
+						<form role="form" th:action="@{/createComment/} + ${idProposal}"
+							th:object="${createComment}" method="POST">
+							<textarea class="form-control" rows="5" id="contentInput"
+								th:field="*{content}" placeholder="Comment"></textarea>
+							<button value="Comment" type="submit" class="btn btn-default"
+								id="SubmitComment">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

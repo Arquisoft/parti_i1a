@@ -67,9 +67,9 @@ public class DatabaseTest {
 		assertEquals("contraseña1",u1.getPassword());
 		assertEquals("mail1",u1.getEmail());
 		assertEquals("Spain",u1.getNationality());
-		assertEquals("1111",u1.getDNI());
+		assertEquals("1111",u1.getDni());
 		assertEquals("Address1",u1.getAddress());
-		assertEquals(new Date(2500000),u1.getBirthDate());
+		assertEquals(new Date(2500000),u1.getBirth());
 		u1.setId(new Long(5));
 		assertEquals(new Long(5), u1.getId());
 		

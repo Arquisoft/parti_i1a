@@ -102,13 +102,13 @@ public class ProposalsLiveHandler {
 		User u1 = new User();
 		u1.setName("David");
 		u1.setEmail("asuka98XD@gmail.com");
-		u1.setDNI("123");
+		u1.setDni("123");
 		u1.setPassword("1234");
 
 		User u2 = new User();
 		u2.setName("Francisco");
 		u2.setEmail("marhuenda@elmundo.com");
-		u2.setDNI("456");
+		u2.setDni("456");
 		u2.setPassword("1234");
 
 		uService.save(u1);

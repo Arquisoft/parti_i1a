@@ -22,10 +22,10 @@ public class User {
     private String password;
 
 	@Column(unique = true)
-	private String DNI;
+	private String dni;
     private String nationality;
     private String address;
-	private Date birthDate;
+	private Date birth;
 
     private boolean isAdmin;
 
@@ -40,17 +40,17 @@ public class User {
 
     public User(){}
 	
-	public User(String name, String surname, String password, String email, String nationality, String DNI,
-			String address, Date birthDate) {
+	public User(String name, String surname, String password, String email, String nationality, String dni,
+			String address, Date birth) {
 		super();
 		setName(name);
 		setSurname(surname);
 		setPassword(password);
 		setEmail(email);
 		setNationality(nationality);
-		setDNI(DNI);
+		setDni(dni);
 		setAddress(address);
-		setBirthDate(birthDate);
+		setBirth(birth);
 	}
 
 	public Long getId() {
@@ -101,12 +101,12 @@ public class User {
 		this.nationality = nationality;
 	}
 
-	public String getDNI() {
-		return DNI;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setDNI(String dNI) {
-		DNI = dNI;
+	public void setDni(String dni) {
+		dni = dni;
 	}
 
 	public String getAddress() {
@@ -117,12 +117,12 @@ public class User {
 		this.address = address;
 	}
 
-	public Date getBirthDate() {
-		return birthDate;
+	public Date getBirth() {
+		return birth;
 	}
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+	public void setBirth(Date birth_date) {
+		this.birth = birth_date;
 	}
 
     public boolean isAdmin() {
@@ -137,7 +137,7 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((DNI == null) ? 0 : DNI.hashCode());
+		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
@@ -151,10 +151,10 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (DNI == null) {
-			if (other.DNI != null)
+		if (dni == null) {
+			if (other.dni != null)
 				return false;
-		} else if (!DNI.equals(other.DNI))
+		} else if (!dni.equals(other.dni))
 			return false;
 		if (email == null) {
 			if (other.email != null)

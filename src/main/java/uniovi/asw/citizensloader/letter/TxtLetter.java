@@ -15,7 +15,7 @@ public class TxtLetter implements Letter {
 	@Override
 	public void write(User u) {
 		BufferedWriter file;
-		String filename = "generatedFiles/"+u.getDNI()+".txt";
+		String filename = "generatedFiles/"+u.getDni()+".txt";
 		try {
 			file = new BufferedWriter(new FileWriter(filename));
 			file.write("Su registro se ha procesado con éxito."

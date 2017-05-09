@@ -1,73 +1,43 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Login</title>
-<style>
-body {
-	margin-top: 100px;
-}
+  <title>Login page</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 
-#loginForm {
-	margin: auto;
-	width: 50%;
-	border: 1px solid rgb(46, 116, 181);
-	padding: 10px;
-	max-width: 300px;
-}
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet"
+     href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+     crossorigin="anonymous" />
 
-p {
-	padding: 5px;
-}
+  <!-- Latest compiled and minified JavaScript -->
+  <script
+     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+     crossorigin="anonymous">
+  </script>
 
-#username {
-	float: right;
-}
-
-#password {
-	float: right;
-}
-
-#submit {
-	margin: auto;
-	width: 49%;
-	border: 1px solid rgb(46, 116, 181);
-	padding: 10px;
-}
-
-#reset {
-	margin: auto;
-	width: 49%;
-	border: 1px solid rgb(46, 116, 181);
-	padding: 10px;
-}
-</style>
-
-
-<meta http-equiv="Content-Type" description="text/html; charset=UTF-8" />
-<meta name="viewport" description="width=device-width, initial-scale=1" />
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div id="loginForm" class="loginForm">
-		<form action="#" th:action="@{/login}" th:object="${credentials}"
-			method="post">
-			<p>
-				Username: <input id="username" type="text" th:field="*{email}" />
-			</p>
-			<p>
-				Password: <input id="password" type="password"
-					th:field="*{password}" />
-			</p>
-			<p>
-				<input id="submit" type="submit" value="Submit" /> <input
-					id="reset" type="reset" value="Reset" />
-			</p>
-		</form>
-	</div>
+  <div class="container-fluid">
+     <h1 align="center">Participation System</h1>
+     <div class="row">
+        <div class="col-md-8">
+           <form role="form" th:action="@{/loginCheck}" th:object="${loginUser}" method="post" id="formLogin">
+              <div class="form-group">
+                 <label for="user">User: </label>
+                 <input type="text" class="form-control" id="user" required="required"
+                    th:field="*{email}" placeholder="Email" />
+              </div>
+              <div class="form-group">
+                 <label for="password">Password: </label>
+                 <input type="password" class="form-control" id="password" required="required"
+                    name="password" th:field="*{password}" placeholder="Password" />
+              </div>
+              <button type="submit" class="btn btn-primary" id="loginButton">Login</button>
+           </form>
+        </div>
+     </div>
+  </div>
 </body>
 </html>

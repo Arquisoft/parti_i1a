@@ -32,12 +32,12 @@ public class ReaderOutputTester {
 		assertEquals(expected.getName(), actual.getName());
 		assertEquals(expected.getSurname(), actual.getSurname());
 		assertEquals(expected.getEmail(), actual.getEmail());
-		assertEquals(expected.getBirthDate(),
-				actual.getBirthDate());
+		assertEquals(expected.getBirth(),
+				actual.getBirth());
 		assertEquals(expected.getAddress(), actual.getAddress());
 		assertEquals(expected.getNationality(),
 				actual.getNationality());
-		assertEquals(expected.getDNI(),
-				actual.getDNI());
+		assertEquals(expected.getDni(),
+				actual.getDni());
 	}
 }

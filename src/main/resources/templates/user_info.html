@@ -1,39 +1,66 @@
-<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>User info</title>
- 	<meta http-equiv="Content-Type" description="text/html; charset=UTF-8" />
-  	<meta name="viewport" description="width=device-width, initial-scale=1" />
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-  	<div class="table-responsive">
-	    <table class="table table-striped">
-	      <tr>
-	        <td id="name_label">Name:</td><td><p id="name" th:text="${user.name}"/></td>
-	      </tr>
-	      <tr>
-	        <td id="surname_label">Surname:</td><td><p id="surname" th:text="${user.surname}"/></td>
-	      </tr>
-	      <tr>
-	        <td id="email_label">Email:</td><td><p id="email" th:text="${user.email}"/></td>
-	      </tr>
-	      <tr>
-	        <td id="birth_label">Date of birth:</td><td><p id="birth" th:text="${user.birthDate==null?'':#dates.format(user.birthDate, 'dd-MM-yyyy')}"/></td>
-	      </tr>
-	      <tr>
-	        <td id="address_label">Address:</td><td><p id="address" th:text="${user.address}"/></td>
-	      </tr>
-	      <tr>
-	        <td id="nationality_label">Nationality:</td><td><p id="nationality" th:text="${user.DNI}"/></td>
-	      </tr>
-	    </table>
-    </div>
-    <form action="change_password">
-		<input type="submit" value="Change" />
-	</form>
-    <a href="/">Logout</a>
-  </body>
+<head>
+<title>User home</title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous">
+	
+</script>
+</head>
+<body>
+	<div class="container-fluid">
+		<h1 align="center">Home</h1>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<h3>Profile</h3>
+				<table class="table table-bordered">
+                    <tr>
+                        <td id="name_label">Name:</td>
+                        <td class="text-center" th:text="${user.name}" id="name"></td>
+                    </tr>
+                    <tr>
+                        <td id="surname_label">Surname:</td>
+                        <td class="text-center" th:text="${user.surname}" id="surname"></td>
+                    </tr>
+                    <tr>
+                        <td id="email_label">Email:</td>
+                        <td class="text-center" th:text="${user.email}" id="email"></td>
+                    </tr>
+                    <tr>
+                        <td id="birth_label">Date of birth:</td>
+                        <td class="text-center" th:text="${user.birth==null?'':#dates.format(user.birth, 'dd-MM-yyyy')}" id="birth"></td>
+                    </tr>
+                    <tr>
+                        <td id="address_label">Address:</td>
+                        <td class="text-center" th:text="${user.address}" id="address"></td>
+                    </tr>
+                    <tr>
+                        <td id="nationality_label">Nationality:</td>
+                        <td class="text-center" th:text="${user.nationality}" id="nationality"></td>
+                    </tr>
+				</table>
+                <form action="change_password">
+                    <button type="submit" class="btn btn-info" id="pass">Change password</button>
+                </form>
+                <form action="see_proposals">
+                    <button type="submit" class="btn btn-info" id="propo">See proposals</button>
+                </form>
+                <a th:href="/" class="btn btn-info">Logout</a>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
