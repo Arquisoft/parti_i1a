@@ -1,5 +1,7 @@
 package uniovi.asw.persistence.model;
 
+import uniovi.asw.persistence.model.types.VoteType;
+
 public class Association {
 
 	public static class Votation {

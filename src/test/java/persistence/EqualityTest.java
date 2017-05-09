@@ -8,7 +8,7 @@ import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.model.Vote;
-import uniovi.asw.persistence.model.VoteType;
+import uniovi.asw.persistence.model.types.VoteType;
 
 public class EqualityTest extends ObjectTheories{
 	

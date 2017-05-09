@@ -20,7 +20,7 @@ import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.model.Vote;
-import uniovi.asw.persistence.model.VoteType;
+import uniovi.asw.persistence.model.types.VoteType;
 import uniovi.asw.services.CommentService;
 import uniovi.asw.services.ProposalService;
 import uniovi.asw.services.UserService;

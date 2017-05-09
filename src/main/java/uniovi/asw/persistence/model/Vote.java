@@ -1,5 +1,8 @@
 package uniovi.asw.persistence.model;
 
+import uniovi.asw.persistence.model.types.KeyVote;
+import uniovi.asw.persistence.model.types.VoteType;
+
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -19,7 +22,7 @@ public class Vote implements Serializable {
 	@Id @ManyToOne
 	private Votable votable;
 	
-	private VoteType voteType;	
+	private VoteType voteType;
 
 	Vote() {}
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.persistence.model.Proposal;
-import uniovi.asw.persistence.model.Topic;
+import uniovi.asw.persistence.model.types.Topic;
 import uniovi.asw.services.ProposalService;
 
 /**

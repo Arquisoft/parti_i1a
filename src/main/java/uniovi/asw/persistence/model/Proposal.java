@@ -1,5 +1,7 @@
 package uniovi.asw.persistence.model;
 
+import uniovi.asw.persistence.model.types.Topic;
+
 import java.util.HashSet;
 import java.util.Set;
 

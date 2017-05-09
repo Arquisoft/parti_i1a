@@ -1,11 +1,9 @@
-package uniovi.asw.persistence.model;
+package uniovi.asw.persistence.model.types;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import javax.persistence.Embeddable;
 
 public enum Topic {
     ENVIROMENT, POLITICS, SPORTS, HEALTHCARE, SECURITY;

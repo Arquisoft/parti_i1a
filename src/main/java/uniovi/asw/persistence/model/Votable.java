@@ -20,7 +20,6 @@ public abstract class Votable {
 	private Long id;
 
 	private int numberOfVotes;
-
 	
 	@OneToMany(mappedBy = "votable")
 	private Set<Vote> votes = new HashSet<>();

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import uniovi.asw.persistence.model.Association;
 import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.persistence.model.Proposal;
-import uniovi.asw.persistence.model.Topic;
+import uniovi.asw.persistence.model.types.Topic;
 import uniovi.asw.persistence.model.User;
 import uniovi.asw.services.CommentService;
 import uniovi.asw.services.ProposalService;

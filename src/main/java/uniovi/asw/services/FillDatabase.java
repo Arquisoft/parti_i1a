@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import uniovi.asw.persistence.model.*;
+import uniovi.asw.persistence.model.types.VoteType;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;

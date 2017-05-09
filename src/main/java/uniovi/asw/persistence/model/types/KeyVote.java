@@ -1,4 +1,4 @@
-package uniovi.asw.persistence.model;
+package uniovi.asw.persistence.model.types;
 
 import java.io.Serializable;
 
