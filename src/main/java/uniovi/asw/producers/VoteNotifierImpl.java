@@ -16,6 +16,6 @@ public class VoteNotifierImpl implements VoteNotifier {
 		long votableId = vote.getVotable().getId();
 		char sign = vote.getVoteType() == VoteType.POSITIVE? '+' : '-';
 		String message = String.format("%d;%s", votableId, sign);
-		producer.sendVoteDePablo("newVote", message);
+		producer.send("newVote", message);
 	}
 }

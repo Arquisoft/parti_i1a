@@ -63,7 +63,7 @@ public class KfkaProducer {
 		});
 	}
 
-    public void sendVoteDePablo(String topic, String data) {
+    public void send(String topic, String data) {
         ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, data);
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override

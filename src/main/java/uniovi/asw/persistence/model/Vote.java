@@ -1,13 +1,18 @@
 package uniovi.asw.persistence.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import uniovi.asw.persistence.model.types.VoteType;
-import uniovi.asw.producers.VoteNotifier;
-
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import org.springframework.beans.factory.annotation.Configurable;
+
+import uniovi.asw.persistence.model.types.VoteType;
 
 @Entity
 @Configurable
@@ -29,19 +34,16 @@ public class Vote implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private VoteType voteType;
 
-    @Transient
-    @Autowired
-    private VoteNotifier notifier;
-
 	Vote(){}
 
 	public Vote(User user, Votable votable, VoteType voteType) {
 		setVoteType(voteType);
 		Association.Votation.link(user, this, votable);
-        if (notifier != null) {
-            notifier.notifyNewVote(this);
-        }
 	}	
+	
+	public User getUser() {
+		return user;
+	}
 	
 	public void _setUser(User user) {
 		this.user = user;
