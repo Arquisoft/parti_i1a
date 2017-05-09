@@ -3,7 +3,6 @@ package uniovi.asw.hello;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,15 +10,19 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import uniovi.asw.persistence.model.*;
+import uniovi.asw.persistence.model.Comment;
+import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.persistence.model.User;
+import uniovi.asw.persistence.model.Vote;
 import uniovi.asw.persistence.model.types.Topic;
 import uniovi.asw.persistence.model.types.VoteType;
 import uniovi.asw.services.CommentService;
@@ -193,8 +196,7 @@ public class MainController {
         );
 
         if (proposal.checkNotAllowedWords()) {
-            pService.save(proposal);
-            //TODO kafkaProducer.send("createdProposal", "created proposal");
+            pService.makeProposal(proposal);
         }
 
         return "redirect:/user";
@@ -203,7 +205,7 @@ public class MainController {
     @RequestMapping("/deleteProposal/{id}")
     public String deleteProposal(Model model, @PathVariable("id") Long id) {
         Proposal p = pService.findById(id);
-        pService.delete(p);
+        pService.remove(p);
         return "redirect:/admin";
     }
 
@@ -214,6 +216,13 @@ public class MainController {
         return "proposal";
     }
 
+    @RequestMapping("/admin/selectProposal/{id}")
+    public String selectProposalAdmin(Model model, @PathVariable Long id) {
+        model.addAttribute("p", pService.findById(id));
+        model.addAttribute("createComment", new Comment());
+        return "admin_proposal";
+    }
+    
     @RequestMapping("/upvoteProposal/{id}")
     public String upvoteProposal(Model model, @PathVariable("id") Long id) {
 
@@ -224,17 +233,16 @@ public class MainController {
             Vote v = vService.findVoteByUserByVotable(user, prop);
 
             if(v != null) {
-                Association.Votation.unlink(user, v, prop);
-                vService.deleteVote(v);
+                vService.undoVote(v);
 
                 if (v.getVoteType() != VoteType.POSITIVE) {
                     v = new Vote(user, prop, VoteType.POSITIVE);
-                    vService.save(v);
+                    vService.makeVote(v);
                 }
             }
             else{
                 v = new Vote(user, prop, VoteType.POSITIVE);
-                vService.save(v);
+                vService.makeVote(v);
             }
 
             pService.save(prop);
@@ -253,17 +261,16 @@ public class MainController {
             Vote v = vService.findVoteByUserByVotable(user, prop);
 
             if(v != null) {
-                Association.Votation.unlink(user, v, prop);
-                vService.deleteVote(v);
+                vService.undoVote(v);
 
                 if (v.getVoteType() != VoteType.NEGATIVE) {
                     v = new Vote(user, prop, VoteType.NEGATIVE);
-                    vService.save(v);
+                    vService.makeVote(v);
                 }
             }
             else{
                 v = new Vote(user, prop, VoteType.NEGATIVE);
-                vService.save(v);
+                vService.makeVote(v);
             }
 
             pService.save(prop);
@@ -299,17 +306,16 @@ public class MainController {
             Vote v = vService.findVoteByUserByVotable(user, c);
 
             if(v != null) {
-                Association.Votation.unlink(user, v, c);
-                vService.deleteVote(v);
+                vService.undoVote(v);
 
                 if( v.getVoteType() != VoteType.POSITIVE){
                     v = new Vote(user, c, VoteType.POSITIVE);
-                    vService.save(v);
+                    vService.makeVote(v);
                 }
             }
             else{
                 v = new Vote(user, c, VoteType.POSITIVE);
-                vService.save(v);
+                vService.makeVote(v);
             }
 
             cService.updateComment(proposalId, c);
@@ -328,17 +334,16 @@ public class MainController {
             Vote v = vService.findVoteByUserByVotable(user, c);
 
             if(v != null) {
-                Association.Votation.unlink(user, v, c);
-                vService.deleteVote(v);
+                vService.undoVote(v);
 
                 if(v.getVoteType() != VoteType.NEGATIVE) {
                     v = new Vote(user, c, VoteType.NEGATIVE);
-                    vService.save(v);
+                    vService.makeVote(v);
                 }
             }
             else{
                 v = new Vote(user, c, VoteType.NEGATIVE);
-                vService.save(v);
+                vService.makeVote(v);
             }
 
             cService.updateComment(proposalId, c);

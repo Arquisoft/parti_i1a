@@ -51,7 +51,7 @@ public class KafkaProducerFactory {
 
 	    @Bean
 	    public ProducerFactory<String, Proposal> proposalProducerFactory() {
-		return new DefaultKafkaProducerFactory<>(proposalProducerConfigs());
+	    	return new DefaultKafkaProducerFactory<>(proposalProducerConfigs());
 	    }
 	    
 	    @Bean

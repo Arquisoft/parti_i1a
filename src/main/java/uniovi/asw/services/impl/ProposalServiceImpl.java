@@ -7,30 +7,43 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.persistence.repositories.CommentRepository;
 import uniovi.asw.persistence.repositories.ProposalRepository;
+import uniovi.asw.persistence.repositories.VoteRepository;
+import uniovi.asw.producers.KfkaProducer;
 import uniovi.asw.services.ProposalService;
 
 @Service
-public class ProposalServiceImpl implements ProposalService{
+public class ProposalServiceImpl implements ProposalService {
 
-	private ProposalRepository repository;
+	private ProposalRepository proposalRepository;
+	private CommentRepository commentRepository;
+	private VoteRepository voteRepository;
+	private KfkaProducer producer;
 
 	@Autowired
-	public ProposalServiceImpl(ProposalRepository repository) {
-		setRepository(repository);
+	public ProposalServiceImpl(ProposalRepository proposalRepository,
+			CommentRepository commentRepository,
+			VoteRepository voteRepository, KfkaProducer producer) {
+		setProposalRepository(proposalRepository);
+		setCommentRepository(commentRepository);
+		setVoteRepository(voteRepository);
+		this.producer = producer;
 	}
-	
+
 	@Override
 	public Proposal save(Proposal proposal) {
-		return getRepository().save(proposal);
+		return getProposalRepository().save(proposal);
 	}
 
 	@Override
 	public List<Proposal> findAll() {
 		List<Proposal> proposals = new ArrayList<>();
-		if (getRepository().findAll() != null) {
-			Iterator<Proposal> it = getRepository().findAll().iterator();
+		if (getProposalRepository().findAll() != null) {
+			Iterator<Proposal> it = getProposalRepository().findAll()
+					.iterator();
 			while (it.hasNext())
 				proposals.add(it.next());
 		}
@@ -39,34 +52,78 @@ public class ProposalServiceImpl implements ProposalService{
 
 	@Override
 	public boolean checkExists(Long id) {
-		return getRepository().findOne(id) != null;
+		return getProposalRepository().findOne(id) != null;
 	}
 
-	private void setRepository(ProposalRepository repository){
-		this.repository = repository;
+	private void setProposalRepository(
+			ProposalRepository repository) {
+		this.proposalRepository = repository;
 	}
-	
-	private ProposalRepository getRepository(){
-		return this.repository;
+
+	private ProposalRepository getProposalRepository() {
+		return this.proposalRepository;
+	}
+
+	private CommentRepository getCommentRepository() {
+		return commentRepository;
+	}
+
+	private void setCommentRepository(
+			CommentRepository commentRepository) {
+		this.commentRepository = commentRepository;
+	}
+
+	private VoteRepository getVoteRepository() {
+		return voteRepository;
+	}
+
+	private void setVoteRepository(VoteRepository voteRepository) {
+		this.voteRepository = voteRepository;
 	}
 
 	@Override
 	public Proposal findById(Long id) {
-		return getRepository().findOne(id);
+		return getProposalRepository().findOne(id);
 	}
 
-    @Override
-    public void clearTable() {
-        getRepository().deleteAll();
-    }
+	@Override
+	public void clearTable() {
+		getProposalRepository().deleteAll();
+	}
 
-    @Override
-    public void delete(Proposal proposal) {
-        getRepository().delete(proposal);
-    }
+	@Override
+	public void delete(Proposal proposal) {
+		for (Comment comment : proposal.getComments()) {
+			// This method is as close as possible to 
+			// ProposalRepository's delete for simplicity
+			// so we don't "undo" the votes through VoteService
+			getVoteRepository().delete(comment.getVotes());
+			getCommentRepository().delete(comment);
+		}
+		getProposalRepository().delete(proposal);
+	}
+	
+	@Override
+	public void remove(Proposal proposal) {
+		Long id = proposal.getId();
+		
+		// Votes aren't "undone" through VoteService
+		// as their only impact beyond Kafka is the vote count
+		// of the proposal that is about to be deleted
+		delete(proposal);
+		
+		producer.sendProposalDeleted(id);
+	}
 
-    @Override
-    public Proposal findProposalByTitle(String tit) {
-        return getRepository().findByTitle(tit);
-    }
+	@Override
+	public Proposal findProposalByTitle(String tit) {
+		return getProposalRepository().findByTitle(tit);
+	}
+
+	@Override
+	public Proposal makeProposal(Proposal proposal) {
+		proposal = getProposalRepository().save(proposal);
+		producer.sendProposal(proposal);
+		return proposal;
+	}
 }
