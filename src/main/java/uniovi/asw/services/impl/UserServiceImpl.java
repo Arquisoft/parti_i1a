@@ -22,9 +22,34 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void save(User user) {
-		getRepository().save(user);
+	public User save(User user) {
+		return getRepository().save(user);
 	}
+
+    @Override
+    public User findUserByLogin(String login) {
+        return getRepository().findByLogin(login);
+    }
+
+    @Override
+    public void clearTable() {
+        getRepository().deleteAll();
+    }
+
+    @Override
+    public User findUserByLoginAndPassword(String login, String password) {
+        return getRepository().findByLoginAndPassword(login, password);
+    }
+
+    @Override
+    public void delete(User user) {
+        getRepository().delete(user);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return getRepository().findOne(id);
+    }
 
 	@Override
 	public List<User> findAll() {
@@ -55,8 +80,4 @@ public class UserServiceImpl implements UserService{
 		return this.repository;
 	}
 
-	@Override
-	public User findLoggableUser(String login, String password) {
-		return getRepository().findLoggableUser(login, password);
-	}
 }

@@ -8,7 +8,8 @@ import uniovi.asw.persistence.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    public User findByEmail(String email);
-    public User findLoggableUser(String login, String password);
+    User findByEmail(String email);
+    User findByLoginAndPassword(String login, String password);
+    User findByLogin(String login);
 
 }

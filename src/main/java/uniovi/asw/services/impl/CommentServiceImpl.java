@@ -8,13 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uniovi.asw.persistence.model.Comment;
+import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.repositories.CommentRepository;
+import uniovi.asw.persistence.repositories.ProposalRepository;
 import uniovi.asw.services.CommentService;
 
 @Service
 public class CommentServiceImpl implements CommentService{
 
 	private CommentRepository repository;
+	private ProposalRepository proposalRepo;
 	
 	@Autowired
 	public CommentServiceImpl(CommentRepository repository) {
@@ -22,8 +26,8 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public void save(Comment comment) {
-		getRepository().save(comment);
+	public Comment save(Comment comment) {
+		return getRepository().save(comment);
 	}
 
 	@Override
@@ -50,4 +54,50 @@ public class CommentServiceImpl implements CommentService{
 		return this.repository;
 	}
 
+    @Override
+    public void delete(Comment comment) {
+        getRepository().delete(comment);
+    }
+
+    @Override
+    public Comment findById(Long id) {
+        return getRepository().findOne(id);
+    }
+
+    @Override
+    public List<Comment> findByUser(User user) {
+        return getRepository().findByUser(user);
+    }
+
+    @Override
+    public List<Comment> findByProposal(Proposal proposal) {
+        List<Comment> list = new ArrayList<Comment>();
+        for( Comment c: getRepository().findAll()){
+            if(c.getProposal().equals(proposal)){
+                list.add(c);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Comment findByProposalAndId(Long proposalId, Long id) {
+        Proposal p = proposalRepo.findOne(proposalId);
+        Comment c = getRepository().findOne(id);
+        if(!p.getComments().contains(c))
+            throw new IllegalStateException("The proposal does not contain the specified comment");
+        return c;
+    }
+
+    @Override
+    public void updateComment(Long proposalId, Comment comment) {
+        Proposal prop = proposalRepo.findOne(proposalId);
+        prop.getComments().add(comment);
+        proposalRepo.save(prop);
+    }
+
+    @Override
+    public void clearTable() {
+        getRepository().deleteAll();
+    }
 }

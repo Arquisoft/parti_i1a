@@ -12,8 +12,7 @@ import uniovi.asw.persistence.model.User;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-	public List<Comment> findByProposal(Proposal proposal);
-
-	public List<Comment> findByUser(User user);
+    List<Comment> findByProposal(Proposal proposal);
+    List<Comment> findByUser(User user);
 
 }

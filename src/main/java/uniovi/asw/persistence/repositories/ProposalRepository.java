@@ -9,6 +9,7 @@ import uniovi.asw.persistence.model.User;
 @Repository
 public interface ProposalRepository extends JpaRepository<Proposal, Long> {
     
-    public Proposal findByUser(User user);
+    Proposal findByUser(User user);
+    Proposal findByTitle(String tit);
 
 }

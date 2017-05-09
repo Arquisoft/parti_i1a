@@ -22,8 +22,8 @@ public class ProposalServiceImpl implements ProposalService{
 	}
 	
 	@Override
-	public void save(Proposal proposal) {
-		getRepository().save(proposal);
+	public Proposal save(Proposal proposal) {
+		return getRepository().save(proposal);
 	}
 
 	@Override
@@ -55,4 +55,18 @@ public class ProposalServiceImpl implements ProposalService{
 		return getRepository().findOne(id);
 	}
 
+    @Override
+    public void clearTable() {
+        getRepository().deleteAll();
+    }
+
+    @Override
+    public void delete(Proposal proposal) {
+        getRepository().delete(proposal);
+    }
+
+    @Override
+    public Proposal findProposalByTitle(String tit) {
+        return getRepository().findByTitle(tit);
+    }
 }
