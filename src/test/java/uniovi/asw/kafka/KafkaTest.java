@@ -16,30 +16,31 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.User;
-import uniovi.asw.persistence.model.VoteMaker;
+import uniovi.asw.persistence.model.Vote;
 import uniovi.asw.persistence.model.types.VoteType;
 import uniovi.asw.producers.KfkaProducer;
 import uniovi.asw.services.FillDatabase;
 import uniovi.asw.services.ProposalService;
 import uniovi.asw.services.UserService;
+import uniovi.asw.services.VoteService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={Application.class})
-public class KafkaTest {
+public abstract class KafkaTest {
 
 	@Autowired
-	private UserService uS;
+	protected UserService uS;
 	@Autowired
-	private ProposalService pS;
+	protected ProposalService pS;
 	@Autowired
-	private KfkaProducer producer;
+	protected KfkaProducer producer;
 	@Autowired
 	private FillDatabase fillDatabase;
 	@Autowired
-	private VoteMaker vm;
+	protected VoteService vS;
 
-	private Set<String> expectedMessages;
-	private Set<String> unexpectedMessages;
+	protected Set<String> expectedMessages;
+	protected Set<String> unexpectedMessages;
 
 	public KafkaTest() {
 		resetMessages();
@@ -62,32 +63,8 @@ public class KafkaTest {
 	public void cleanUp() {
 		fillDatabase.fill();
 	}
-
-	@Test
-	public void testMessages() throws Exception {
-		
-		// Test messaging
-		expectedMessages.add("TestVote1");
-		expectedMessages.add("TestVote2");
-		for (String message : expectedMessages) {
-			producer.send("newVote", message);
-		}
-
-		// Test actual votes
-		Proposal prop = pS.findAll().get(0);
-		User user0 = uS.findAll().get(0);
-		User user1 = uS.findAll().get(1);
-
-		expectedMessages.add(String.format("%d;+", prop.getId()));
-		expectedMessages.add(String.format("%d;-", prop.getId()));
-
-		vm.makeVote(user0, prop, VoteType.POSITIVE);
-		vm.makeVote(user1, prop, VoteType.NEGATIVE);
-		
-		assertReceived();
-	}
 	
-	private void assertReceived() {
+	protected void assertReceived() {
 		long startMillis = System.currentTimeMillis();
 		long timeOut = 15000;
 		while (expectedMessages.size() != 0
@@ -103,9 +80,8 @@ public class KafkaTest {
 		Assert.assertEquals(errorMessage, 0,
 				unexpectedMessages.size());
 	}
-
-	@KafkaListener(topics = "newVote")
-	public void listen(String message) {
+	
+	protected void listen(String message) {
 		if (!expectedMessages.remove(message)) {
 			unexpectedMessages.add(message);
 		}

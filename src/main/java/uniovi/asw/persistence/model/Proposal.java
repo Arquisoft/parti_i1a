@@ -123,13 +123,13 @@ public class Proposal extends Votable {
 
 	public void setTopicAux(String topicAux) {
 		this.topicAux = topicAux;
-		if (topicAux == "POLITICS")
+		if (topicAux.equals("POLITICS"))
 			this.topic = Topic.POLITICS;
-		if (topicAux == "HEALTHCARE")
+		if (topicAux.equals("HEALTHCARE"))
 			this.topic = Topic.HEALTHCARE;
-		if (topicAux == "SECURITY")
+		if (topicAux.equals("SECURITY"))
 			this.topic = Topic.SECURITY;
-		if (topicAux == "SPORTS")
+		if (topicAux.equals("SPORTS"))
 			this.topic = Topic.SPORTS;
 	}
 

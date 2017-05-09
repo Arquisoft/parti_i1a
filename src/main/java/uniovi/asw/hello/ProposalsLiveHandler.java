@@ -82,48 +82,54 @@ public class ProposalsLiveHandler {
 		logger.info("New proposal received: \"" + proposal + "\"");
 	}
 
+	@KafkaListener(topics = "deletedProposal")
+	public void listenDeletedProposals(String idStr) {
+		long id = Long.parseLong(idStr);
+		proposals.remove(id);
+	}
+	
 	/**
 	 * Do the initial search on the database
 	 */
 	@PostConstruct
 	private void updateProposalsFromDatabase() {
 
-		Proposal p1 = new Proposal();
+//		Proposal p1 = new Proposal();
+//
+//		p1.setTitle("Liberate snakes through the city");
+//		p1.setDescription("We all hate rats, we should set" + " some snakes free to eat them, once"
+//				+ " the rats are extinct we can throw the snakes in Gijón");
+//		p1.setMinVotes(100);
+//		p1.setTopic(Topic.HEALTHCARE);
+//		p1.setNumberOfVotes(890);
+//
+//		pService.save(p1);
 
-		p1.setTitle("Liberate snakes through the city");
-		p1.setDescription("We all hate rats, we should set" + " some snakes free to eat them, once"
-				+ " the rats are extinct we can throw the snakes in Gijón");
-		p1.setMinVotes(100);
-		p1.setTopic(Topic.HEALTHCARE);
-		p1.setNumberOfVotes(890);
+//		User u1 = new User();
+//		u1.setName("David");
+//		u1.setEmail("asuka98XD@gmail.com");
+//		u1.setDni("123");
+//		u1.setPassword("1234");
+//
+//		User u2 = new User();
+//		u2.setName("Francisco");
+//		u2.setEmail("marhuenda@elmundo.com");
+//		u2.setDni("456");
+//		u2.setPassword("1234");
+//
+//		uService.save(u1);
+//		uService.save(u2);
 
-		pService.save(p1);
-
-		User u1 = new User();
-		u1.setName("David");
-		u1.setEmail("asuka98XD@gmail.com");
-		u1.setDni("123");
-		u1.setPassword("1234");
-
-		User u2 = new User();
-		u2.setName("Francisco");
-		u2.setEmail("marhuenda@elmundo.com");
-		u2.setDni("456");
-		u2.setPassword("1234");
-
-		uService.save(u1);
-		uService.save(u2);
-
-		Comment c1 = new Comment();
-		Association.MakeComment.link(u1, c1, p1);
-		c1.setContent("pole");
-
-		Comment c2 = new Comment();
-		c2.setContent("No te lo perdonare Carmena");
-		Association.MakeComment.link(u2, c2, p1);
-
-		cService.save(c1);
-		cService.save(c2);
+//		Comment c1 = new Comment();
+//		Association.MakeComment.link(u1, c1, p1);
+//		c1.setContent("pole");
+//
+//		Comment c2 = new Comment();
+//		c2.setContent("No te lo perdonare Carmena");
+//		Association.MakeComment.link(u2, c2, p1);
+//
+//		cService.save(c1);
+//		cService.save(c2);
 
 		Map<Long, Proposal> proposalsMap = new HashMap<Long, Proposal>();
 
@@ -134,7 +140,6 @@ public class ProposalsLiveHandler {
 
 		this.proposals = proposalsMap;
 		logger.info("Loading proposals from the database");
-
 	}
 
 	public Map<Long, Proposal> getMap() {
