@@ -1,37 +1,76 @@
 package uniovi.asw.persistence.model;
 
+import uniovi.asw.persistence.model.types.MinSupport;
+import uniovi.asw.persistence.model.types.NotAllowedWords;
 import uniovi.asw.persistence.model.types.Topic;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="TProposals")
 public class Proposal extends Votable{
 	
 	private String title;
-	private String content;	
+	private String description;
 	private int minVotes;
+    private Date created;
+    @Enumerated(EnumType.STRING)
 	private Topic topic;
-	
-	@OneToMany(mappedBy = "proposal")
+    private String topicAux;
+
+    @ElementCollection
+    private Set<String> notAllowedWords = NotAllowedWords.getInstance().getSet();
+
+	@OneToMany(mappedBy = "proposal", fetch = FetchType.EAGER)
 	private Set<Comment> comments = new HashSet<Comment>();
 	
 	@ManyToOne
 	private User user;	
 	
-	public Proposal(){}	
-	
-	public Proposal(User user, String title, String content){
-		Association.MakeProposal.link(user, this);
-		setTitle(title);
-		setContent(content);
-	}
+	public Proposal(){}
+
+    public Proposal(User user, String tit) {
+        this.title = tit;
+        this.comments = new HashSet<Comment>();
+        this.notAllowedWords = NotAllowedWords.getInstance().getSet();
+        this.minVotes = MinSupport.getInstance().getSupport();
+        Association.MakeProposal.link(user, this);
+    }
+
+    public Proposal(User user, String tit, String description){
+        this.title = tit;
+        this.description = description;
+        this.comments = new HashSet<Comment>();
+        this.notAllowedWords = NotAllowedWords.getInstance().getSet();
+        this.minVotes = MinSupport.getInstance().getSupport();
+        Association.MakeProposal.link(user, this);
+    }
+
+    public Proposal(User user, String tit, String desc, String topic){
+        this.title = tit;
+        this.description = desc;
+        setTopicAux(topic);
+        this.minVotes = MinSupport.getInstance().getSupport();
+        this.created = new Date();
+        this.comments = new HashSet<Comment>();
+        this.notAllowedWords = NotAllowedWords.getInstance().getSet();
+        Association.MakeProposal.link(user, this);
+    }
+
+    public Proposal(User user, String tit, String desc, String topic, int minSupport, Set<String> l){
+        this.title = tit;
+        this.description = desc;
+        setTopicAux(topic);
+        this.created = new Date();
+        this.comments = new HashSet<Comment>();
+        this.minVotes = minSupport;
+        this.notAllowedWords = l;
+        Association.MakeProposal.link(user, this);
+    }
 
 	public String getTitle() {
 		return title;
@@ -48,11 +87,11 @@ public class Proposal extends Votable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getContent() {
-		return content;
+	public String getDescription() {
+		return description;
 	}
-	public void setContent(String content) {
-		this.content = content;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public int getMinVotes() {
@@ -74,9 +113,35 @@ public class Proposal extends Votable{
 		this.user=user;		
 	}
 
+    public String getTopicAux() {
+        return topicAux;
+    }
+
+    public void setTopicAux(String topicAux) {
+        this.topicAux = topicAux;
+        if( topicAux == "POLITICS" )
+            this.topic = Topic.POLITICS;
+        if( topicAux == "HEALTHCARE" )
+            this.topic = Topic.HEALTHCARE;
+        if( topicAux == "SECURITY" )
+            this.topic = Topic.SECURITY;
+        if( topicAux == "SPORTS" )
+            this.topic = Topic.SPORTS;
+    }
+
+    public boolean checkNotAllowedWords(){
+        for(String s: notAllowedWords){
+            if(description.contains(s)){
+                System.out.println("Not allowed Word: " + s);
+                return false;
+            }
+        }
+        return true;
+    }
+
 	@Override
 	public String toString() {
-	    return "Proposal [title=" + title + ", content=" + content + ", minVotes=" + minVotes + ", topic=" + topic
+	    return "Proposal [title=" + title + ", description=" + description + ", minVotes=" + minVotes + ", topic=" + topic
 		    + ", comments=" + comments + ", user=" + user + "]";
 	}	
 }

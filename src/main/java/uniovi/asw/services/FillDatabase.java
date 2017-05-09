@@ -49,7 +49,7 @@ public class FillDatabase {
 	    List<Proposal> tes = pS.findAll();
 	    List<Vote> test = vS.findAll();
 
-	    System.out.println("Oh boy");
+//	    System.out.println("Oh boy");
     }
 
     private void initializeData() {
@@ -60,22 +60,12 @@ public class FillDatabase {
 	}
 
     private void initializeUsers() {
-		u1 = new User("Daniel","Fernández Feito","email1", new Date(),"Address1","Spain","1111");
-        u1.setLogin("dani");
-        u1.setPassword("password");
-		u2 = new User("Diego Roger","Freijó Álvarez","email2", new Date(),"Address2","Spain","2222");
-        u2.setLogin("diego");
-        u2.setPassword("password");
-		u3 = new User("Sergio","García Álvarez","email3", new Date(),"Address3","Australia", "3333");
-        u3.setLogin("sergio");
-        u3.setPassword("password");
-        u4 = new User("Pablo","García Ledo","email4", new Date(),"Address4","Australia","4444");
-        u4.setLogin("pablo");
-        u4.setPassword("password");
-		uadmin = new User("Admin","Istrador","emailadmin", new Date(),"AddressAdmin","Spain","5555");
+		u1 = new User("Daniel","Fernández Feito", "password", "dani@gmail.com","Spain","1111","address1", new Date());
+		u2 = new User("Diego Roger","Freijó Álvarez", "password", "diego@gmail.com","Spain","2222","address2", new Date());
+		u3 = new User("Sergio","García Álvarez","password","sergio@gmail.com", "Australia","3333", "address3", new Date());
+        u4 = new User("Pablo","García Ledo","password", "pablo@gmail.com","Kuala lumpur","4444","address4", new Date());
+		uadmin = new User("Admin","Istrador","password","admin", "Admin Country","5555","address5", new Date());
 		uadmin.setAdmin(true);
-		uadmin.setLogin("admin");
-		uadmin.setPassword("password");
 		addUsers();
 	}
 
@@ -105,12 +95,12 @@ public class FillDatabase {
     }
 
 	private void initializeComments() {
-		c1 = new Comment(u1, "Comment body 1", p1);
-		c2 = new Comment(u2, "Comment body 2", p2);
-		c3 = new Comment(u3, "Comment body 3", p3);
-		c4 = new Comment(u4, "Comment body 4", p4);
-		c5 = new Comment(u4, "Comment body 5", p5);
-		c6 = new Comment(u3, "Comment body 6", p5);
+		c1 = new Comment("Comment body 1", u1, p1);
+		c2 = new Comment("Comment body 2", u2, p2);
+		c3 = new Comment("Comment body 3", u3, p3);
+		c4 = new Comment("Comment body 4", u4, p4);
+		c5 = new Comment("Comment body 5", u4, p5);
+		c6 = new Comment("Comment body 6", u3, p5);
 		addComments();
 	}
 

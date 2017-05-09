@@ -91,7 +91,7 @@ public class ProposalsLiveHandler {
 		Proposal p1 = new Proposal();
 
 		p1.setTitle("Liberate snakes through the city");
-		p1.setContent("We all hate rats, we should set" + " some snakes free to eat them, once"
+		p1.setDescription("We all hate rats, we should set" + " some snakes free to eat them, once"
 				+ " the rats are extinct we can throw the snakes in Gijón");
 		p1.setMinVotes(100);
 		p1.setTopic(Topic.HEALTHCARE);

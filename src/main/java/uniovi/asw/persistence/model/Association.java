@@ -11,25 +11,25 @@ public class Association {
 			vote._setUser(User);
 			
 			if(vote.getVoteType().equals(VoteType.POSITIVE))
-				votable.setNumberOfVotes(votable.getNumberOfVotes() + 1);
+                votable.incrementUpvotes();
 			else if(vote.getVoteType().equals(VoteType.NEGATIVE))
-				votable.setNumberOfVotes(votable.getNumberOfVotes() - 1);
-			
+                votable.incrementDownvotes();
+
 			votable._getVotes().add(vote);
 			User._getVotes().add(vote);
 		}
 
-		public static void unlink(User User, Vote vote, Proposal proposal) {
-			proposal._getVotes().remove(vote);
+		public static void unlink(User User, Vote vote, Votable votable) {
+			votable._getVotes().remove(vote);
 			User._getVotes().remove(vote);
 
 			vote._setVotable(null);
 			vote._setUser(null);
 
 			if(vote.getVoteType().equals(VoteType.POSITIVE))
-				proposal.setNumberOfVotes(proposal.getNumberOfVotes() - 1);
+                votable.decrementUpvotes();
 			else if(vote.getVoteType().equals(VoteType.NEGATIVE))
-				proposal.setNumberOfVotes(proposal.getNumberOfVotes() + 1);
+                votable.decrementDownvotes();
 			
 		}
 	}

@@ -1,13 +1,12 @@
 package producer;
 
 import static org.junit.Assert.*;
-import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -45,7 +44,7 @@ public class GeneratorTest {
     public void generateProposalTest() {
 	Proposal p = mg.generateProposal();
 	assertTrue(p.getTitle().length()>0);
-	assertTrue(p.getContent().length()>0);
+	assertTrue(p.getDescription().length()>0);
 	assertTrue(p.getTopic() != null);
     }
     

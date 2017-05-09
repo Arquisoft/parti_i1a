@@ -4,13 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "TUsers")
@@ -19,28 +13,32 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private String name;
 	private String surname;
-	private String password;
+
 	@Column(unique = true, nullable = false)
 	private String email;
-	private String nationality;
+    private String password;
+
 	@Column(unique = true)
 	private String DNI;
-	private String address;
+    private String nationality;
+    private String address;
 	private Date birthDate;
 
-	public User() {
-	}
+    private boolean isAdmin;
 
-	@OneToMany(mappedBy = "user")
-	private Set<Proposal> proposals = new HashSet<Proposal>();
-	
-	@OneToMany(mappedBy = "user")
-	private Set<Vote> votes = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Proposal> proposals = new HashSet<Proposal>();
 
-	@OneToMany(mappedBy = "user")
-	private Set<Comment> comments = new HashSet<Comment>();
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private Set<Vote> votes = new HashSet<Vote>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Comment> comments = new HashSet<Comment>();
+
+    public User(){}
 	
 	public User(String name, String surname, String password, String email, String nationality, String DNI,
 			String address, Date birthDate) {
@@ -127,6 +125,14 @@ public class User {
 		this.birthDate = birthDate;
 	}
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -205,4 +211,5 @@ public class User {
 	public void deleteVote(Vote vote, Proposal proposal){
 		Association.Votation.unlink(this, vote, proposal);
 	}
+
 }

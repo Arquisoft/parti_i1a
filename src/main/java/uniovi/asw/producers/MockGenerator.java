@@ -64,7 +64,7 @@ public class MockGenerator {
 	Proposal p = new Proposal();
 
 	p.setTitle(titles.get(RANDOM.nextInt(titles.size())));
-	p.setContent(MOCK_CONTENT);
+	p.setDescription(MOCK_CONTENT);
 	p.setMinVotes(RANDOM.nextInt(100000));
 	p.setTopic(Topic.randomTopic());
 	p.setNumberOfVotes(RANDOM.nextInt(100000));

@@ -1,51 +1,87 @@
 package uniovi.asw.persistence.model;
 
+import uniovi.asw.persistence.model.types.VoteType;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Votable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
 
-	private int numberOfVotes;
-	
-	@OneToMany(mappedBy = "votable")
+	@OneToMany(mappedBy = "votable", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
 	private Set<Vote> votes = new HashSet<>();
 
-	public Long getId() {
-		return id;
-	}
-	
-	Set<Vote> _getVotes() {
-		return votes;
-	}
-	
-	public int getNumberOfVotes() {
-		return numberOfVotes;
-	}
-	
-	public Set<Vote> getVotes(){
-		return new HashSet<Vote>(votes);
-	}
+    private int upvotes;
+    private int downvotes;
 
-	public void setNumberOfVotes(int numberOfVotes) {
-		this.numberOfVotes = numberOfVotes;
-	}
-	
-	public void addVote(){
-		numberOfVotes++;
-	}
-	
+    Votable() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    Set<Vote> _getVotes() {
+        return votes;
+    }
+
+    public Set<Vote> getVotes(){
+        return new HashSet<Vote>(votes);
+    }
+
+    public int getUpvotes() {
+        process();
+        return upvotes;
+    }
+
+    public int getDownvotes() {
+        process();
+        return downvotes;
+    }
+
+    public void incrementUpvotes() {
+        this.upvotes++;
+    }
+
+    public void incrementDownvotes() {
+        this.downvotes++;
+    }
+
+    public void decrementUpvotes() {
+        this.upvotes--;
+    }
+
+    public void decrementDownvotes() {
+        this.downvotes--;
+    }
+
+    private void process(){
+        upvotes = 0; downvotes = 0;
+        for(Vote v: votes){
+            if( v.getVoteType() == VoteType.POSITIVE)
+                upvotes++;
+            if ( v.getVoteType() == VoteType.NEGATIVE)
+                downvotes++;
+        }
+    }
+
+    public int getScore() {
+        process();
+        int number = upvotes - downvotes;
+        return number;
+    }
+
+
+
+    private int numberOfVotes;
+    public int getNumberOfVotes(){return numberOfVotes;}
+    public void setNumberOfVotes(int numberOfVotes){this.numberOfVotes = numberOfVotes;}
+    public void addVote(){this.numberOfVotes++;}
+
 }
