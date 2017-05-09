@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService{
 	}
 
     @Override
-    public User findUserByLogin(String login) {
-        return getRepository().findByLogin(login);
+    public User findUserByEmail(String email) {
+        return getRepository().findByEmail(email);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findUserByLoginAndPassword(String login, String password) {
-        return getRepository().findByLoginAndPassword(login, password);
+    public User findUserByEmailAndPassword(String email, String password) {
+        return getRepository().findByEmailAndPassword(email, password);
     }
 
     @Override
