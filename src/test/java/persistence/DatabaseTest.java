@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +23,10 @@ import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.model.Vote;
 import uniovi.asw.persistence.model.types.VoteType;
 import uniovi.asw.services.CommentService;
+import uniovi.asw.services.FillDatabase;
 import uniovi.asw.services.ProposalService;
 import uniovi.asw.services.UserService;
+import uniovi.asw.services.VoteService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -40,9 +43,14 @@ public class DatabaseTest {
 	private CommentService cS;
 	@Autowired
 	private ProposalService pS;
-
+	@Autowired
+	private VoteService vS;
+	@Autowired
+	private FillDatabase fD;
+	
 	@Before
 	public void setUp() {
+		clearData();
 		initializeData();
 		try {
 			addUsers();
@@ -53,9 +61,14 @@ public class DatabaseTest {
 		}
 	}
 
+	@After
+	public void restore() {
+		fD.fill();
+	}
+	
 	@Test
 	public void testServices() {
-		assertTrue(uS.findAll().size() == 6);
+		assertEquals(4, uS.findAll().size());
 		assertTrue(uS.checkExists(u1.getId()));
 		assertTrue(uS.checkExists(u2.getId()));
 		assertTrue(uS.checkExists(u3.getId()));
@@ -81,7 +94,7 @@ public class DatabaseTest {
 
 		// Proposals
 
-		assertTrue(pS.findAll().size() == 5);
+		assertEquals(4, pS.findAll().size());
 		assertTrue(pS.checkExists(p1.getId()));
 		assertTrue(pS.checkExists(p2.getId()));
 		assertTrue(pS.checkExists(p3.getId()));
@@ -89,40 +102,39 @@ public class DatabaseTest {
 
 		// Comments
 
-		assertTrue(cS.findAll().size() == 6);
+		assertEquals(4, cS.findAll().size());
 		assertTrue(cS.checkExists(c1.getId()));
 		assertTrue(cS.checkExists(c2.getId()));
 		assertTrue(cS.checkExists(c3.getId()));
 		assertTrue(cS.checkExists(c4.getId()));
 
 		// Making Proposals
-
 		makeProposals();
-		assertEquals(u1.getProposals().size(), 3);
-		assertEquals(u2.getProposals().size(), 1);
+		assertEquals(3, u1.getProposals().size());
+		assertEquals(1, u2.getProposals().size());
 		p1.addVote();
-		assertEquals(p1.getNumberOfVotes(),p1.getVotes().size()+1);
+		assertEquals(p1.getVotes().size()+1, p1.getNumberOfVotes());
 
 		// Commenting
 		comments();
-		assertEquals(u1.getComments().size(), 3);
-		assertEquals(p1.getComments().size(), 2);
-		assertEquals(p2.getComments().size(), 2);
-		assertEquals(p3.getComments().size(), 1);
-		assertEquals(u2.getComments().size(), 2);
-		assertEquals(u3.getComments().size(), 2);
+		assertEquals(3, u1.getComments().size());
+		assertEquals(2, p1.getComments().size());
+		assertEquals(2, p2.getComments().size());
+		assertEquals(1, p3.getComments().size());
+		assertEquals(2, u2.getComments().size());
+		assertEquals(2, u3.getComments().size());
 
 		// Voting
 		vote();
-		assertEquals(u1.getVotes().size(), 3);
-		assertEquals(p1.getVotes().size(), 2);		
-		assertEquals(p2.getVotes().size(), 1);		
+		assertEquals(3, u1.getVotes().size());
+		assertEquals(2, p1.getVotes().size());		
+		assertEquals(1, p2.getVotes().size());		
 		
 		// Removing the comment/proposal
 		u1.deleteComment(p1, c1);		
 		u1.deleteProposal(p1);		
-		assertEquals(u1.getComments().size(),2);
-		assertEquals(u1.getProposals().size(),2);	
+		assertEquals(2, u1.getComments().size());
+		assertEquals(2, u1.getProposals().size());	
 		
 		// Equals assertions
 		assertEquals(p1,p1);
@@ -134,6 +146,13 @@ public class DatabaseTest {
 		initializeUsers();
 		initializeProposals();
 		initializeComments();
+	}
+
+	private void clearData() {
+		vS.clearTable();
+		cS.clearTable();
+		pS.clearTable();
+		uS.clearTable();
 	}
 	
 	// Create Users
