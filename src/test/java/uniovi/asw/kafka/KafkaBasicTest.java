@@ -11,13 +11,13 @@ public class KafkaBasicTest extends KafkaTest {
 		expectedMessages.add("TestVote1");
 		expectedMessages.add("TestVote2");
 		for (String message : expectedMessages) {
-			producer.send("newVote", message);
+			producer.send("basicTest", message);
 		}
 		
 		assertReceived();
 	}
 
-	@KafkaListener(topics = "newVote")
+	@KafkaListener(topics = "basicTest")
 	public void listenMessage(String message) {
 		listen(message);
 	}
