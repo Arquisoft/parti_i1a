@@ -1,59 +1,54 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Admin</title>
-<meta http-equiv="refresh" content="3" />
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous" />
-
-<!-- Latest compiled and minified JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous">
-</script>
-
-</head>
-<body>
-	<div class="container-fluid">
-		<div class="row">
-			<div>
-				<h1 class="text-primary" align="center">Admin</h1>
-				<div class="row">
-					<div class="col-md-12">
-						<h3>Proposals</h3>
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Proposal</th>
-									<th>Topic</th>
-									<th>Score</th>
-									<th></th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="p : ${proposals}">
-									<td th:text="${p.getTitle()}"></td>
-									<td th:text="${p.getTopic()}"></td>
-									<td th:text="${p.calculateScore()}"></td>
-									<td><a th:href="${'/admin/selectProposal/' + p.getId()}"
-										class="btn btn-block btn-info"> See </a></td>
-									<td><a th:href="${'/deleteProposal/' + p.getId()}"
-										class="btn btn-block btn-danger" th:id="${'delete'+p.getId()}">Delete</a></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
+   <head>
+      <title>Admin</title>
+      <meta http-equiv="refresh" content="3" />
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet"
+         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+         crossorigin="anonymous" />
+      <!-- Latest compiled and minified JavaScript -->
+      <script
+         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+         crossorigin="anonymous"></script>
+   </head>
+   <body>
+      <div class="container-fluid">
+         <div class="row">
+            <div>
+               <h1 class="text-primary" align="center">Admin</h1>
+               <div class="row">
+                  <div class="col-md-12">
+                     <h3>Proposals</h3>
+                     <table class="table">
+                        <thead>
+                           <tr>
+                              <th>Proposal</th>
+                              <th>Topic</th>
+                              <th>Score</th>
+                              <th></th>
+                              <th></th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr th:each="p : ${proposals}">
+                              <td th:text="${p.getTitle()}"></td>
+                              <td th:text="${p.getTopic()}"></td>
+                              <td th:text="${p.calculateScore()}"></td>
+                              <td><a th:href="${'/admin/selectProposal/' + p.getId()}"
+                                 class="btn btn-block btn-info"> See </a></td>
+                              <td><a th:href="${'/deleteProposal/' + p.getId()}"
+                                 class="btn btn-block btn-danger" th:id="${'delete'+p.getId()}">Delete</a></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
 </html>
