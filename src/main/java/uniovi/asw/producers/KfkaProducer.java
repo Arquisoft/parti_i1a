@@ -12,6 +12,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.persistence.model.Comment;
 
 @ManagedBean
 public class KfkaProducer {
@@ -22,6 +23,8 @@ public class KfkaProducer {
 	private KafkaTemplate<String, String> kafkaTemplate;
 	@Autowired
 	private KafkaTemplate<String, Proposal> kafkaProposalTemplate;
+	@Autowired
+	private KafkaTemplate<String, Comment> kafkaCommentTemplate;
 //	@Autowired
 //	private MockGenerator generator;
 
@@ -57,6 +60,22 @@ public class KfkaProducer {
 			@Override
 			public void onFailure(Throwable ex) {
 				logger.error("Error on sending proposal: \"" + proposal + "\", stacktrace " + ex.getMessage());
+			}
+		});
+	}
+	
+	public void sendComment(Comment comment) {
+
+		ListenableFuture<SendResult<String, Comment>> future = kafkaCommentTemplate.send("newComment", comment);
+		future.addCallback(new ListenableFutureCallback<SendResult<String, Comment>>() {
+			@Override
+			public void onSuccess(SendResult<String, Comment> result) {
+				logger.info("Success on sending comment: \"" + comment + "\"");
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				logger.error("Error on sending comment: \"" + comment + "\", stacktrace " + ex.getMessage());
 			}
 		});
 	}

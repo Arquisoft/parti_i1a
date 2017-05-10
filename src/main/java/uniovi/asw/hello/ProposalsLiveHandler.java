@@ -81,6 +81,14 @@ public class ProposalsLiveHandler {
 
 		logger.info("New proposal received: \"" + proposal + "\"");
 	}
+	
+	@KafkaListener(topics = "newComment", containerFactory = "kafkaCommentListenerContainerFactory")
+	public void listenComments(Comment comment) {
+
+//		TODO: handle received comments
+
+		logger.info("New comment received: \"" + comment + "\"");
+	}
 
 	@KafkaListener(topics = "deletedProposal")
 	public void listenDeletedProposals(String idStr) {

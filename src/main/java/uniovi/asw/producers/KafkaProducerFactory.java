@@ -13,57 +13,85 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import uniovi.asw.persistence.model.Proposal;
+import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.serializers.ProposalSerializer;
+import uniovi.asw.serializers.CommentSerializer;
 
 @Configuration
 @EnableKafka
 public class KafkaProducerFactory {
 
-	 @Bean
-	    public ProducerFactory<String, String> producerFactory() {
-	        return new DefaultKafkaProducerFactory<>(producerConfigs());
-	    }
+	@Bean
+	public ProducerFactory<String, String> producerFactory() {
+		return new DefaultKafkaProducerFactory<>(producerConfigs());
+	}
 
-	    @Bean
-	    public Map<String, Object> producerConfigs() {
-	        Map<String, Object> props = new HashMap<>();
-	        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-	        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-	        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-	        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-	        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-	        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-	        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-	        return props;
-	    }
+	@Bean
+	public Map<String, Object> producerConfigs() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		props.put(ProducerConfig.RETRIES_CONFIG, 0);
+		props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+		props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		return props;
+	}
 
-	    @Bean
-	    public KafkaTemplate<String, String> kafkaTemplate() {
-	        return new KafkaTemplate<String, String>(producerFactory());
-	    }
-	    
-	    ////////////////////////////////////////////////////////////////////////////////////////////
-	    
-	    @Bean
-	    public KafkaTemplate<String, Proposal> kafkaProposalTemplate() {
-	        return new KafkaTemplate<String, Proposal>(proposalProducerFactory());
-	    }
+	@Bean
+	public KafkaTemplate<String, String> kafkaTemplate() {
+		return new KafkaTemplate<String, String>(producerFactory());
+	}
 
-	    @Bean
-	    public ProducerFactory<String, Proposal> proposalProducerFactory() {
-	    	return new DefaultKafkaProducerFactory<>(proposalProducerConfigs());
-	    }
-	    
-	    @Bean
-	    public Map<String, Object> proposalProducerConfigs() {
-	        Map<String, Object> props = new HashMap<>();
-	        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-	        props.put(ProducerConfig.RETRIES_CONFIG, 0);
-	        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-	        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-	        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-	        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-	        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ProposalSerializer.class);
-	        return props;
-	    }
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Bean
+	public KafkaTemplate<String, Proposal> kafkaProposalTemplate() {
+		return new KafkaTemplate<String, Proposal>(proposalProducerFactory());
+	}
+
+	@Bean
+	public ProducerFactory<String, Proposal> proposalProducerFactory() {
+		return new DefaultKafkaProducerFactory<>(proposalProducerConfigs());
+	}
+
+	@Bean
+	public Map<String, Object> proposalProducerConfigs() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		props.put(ProducerConfig.RETRIES_CONFIG, 0);
+		props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+		props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ProposalSerializer.class);
+		return props;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+	@Bean
+	public KafkaTemplate<String, Comment> kafkaCommentTemplate() {
+		return new KafkaTemplate<String, Comment>(commentProducerFactory());
+	}
+
+	@Bean
+	public ProducerFactory<String, Comment> commentProducerFactory() {
+		return new DefaultKafkaProducerFactory<>(commentProducerConfigs());
+	}
+
+	@Bean
+	public Map<String, Object> commentProducerConfigs() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		props.put(ProducerConfig.RETRIES_CONFIG, 0);
+		props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+		props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CommentSerializer.class);
+		return props;
+	}
 }
