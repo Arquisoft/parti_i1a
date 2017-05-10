@@ -20,7 +20,7 @@ import uniovi.asw.services.UserService;
 import uniovi.asw.services.VoteService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={Application.class})
+@SpringBootTest(classes=Application.class)
 public abstract class KafkaTest {
 
 	@Autowired

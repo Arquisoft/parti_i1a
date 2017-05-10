@@ -3,6 +3,7 @@ package uniovi.asw.citizensloader.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,10 +17,12 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
 import uniovi.asw.citizensloader.letter.PasswordGenerator;
 import uniovi.asw.persistence.model.User;
 
+@Service
 public class ReaderImpl implements Reader {
 
 	List<User> users;
@@ -27,62 +30,67 @@ public class ReaderImpl implements Reader {
 	@Override
 	public List<User> readFile(String path) {
 		try {
-
-			//
-			users = new ArrayList<User>();
 			// Load the .xlsx
-			FileInputStream file = new FileInputStream(
+			InputStream file = new FileInputStream(
 					new File(path));
 
-			// Create Workbook instance holding reference to .xlsx file
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-
-			// Get first/desired sheet from the workbook
-			XSSFSheet sheet = workbook.getSheetAt(0);
-
-			//DataFormatter formatter = new DataFormatter();
-			int columnCount = 0;
-
-			// Iterate through each rows one by one
-			Iterator<Row> rowIterator = sheet.iterator();
-			rowIterator.next();
-			int rowCount = 0;
-			while (rowIterator.hasNext()) {
-				String[] values = new String[7];
-				columnCount = 0;
-				Row row = rowIterator.next();
-
-				// For each row, iterate through all the columns
-				Iterator<Cell> cellIterator = row.cellIterator();
-
-				for (; columnCount < 3; columnCount++) {
-					values[columnCount] = readStr(cellIterator,
-							rowCount, columnCount);
-				}
-
-				Date birthDate = readDate(cellIterator, rowCount,
-						columnCount);
-				columnCount++;
-
-				for (; columnCount < 7; columnCount++) {
-					values[columnCount] = readStr(cellIterator,
-							rowCount, columnCount);
-				}
-				User user = new User(values[0], values[1], PasswordGenerator.generatePassword(), 
-						values[2], values[5], values[6], values[4],  birthDate);
-
-				users.add(user);
-
-				System.out.println("");
-
-				rowCount++;
-			}
-			workbook.close();
-			file.close();
+			users = readStream(file);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return users;
+	}
+
+	public List<User> readStream(InputStream file) throws IOException {
+		
+		users = new ArrayList<>();
+		
+		// Create Workbook instance holding reference to .xlsx file
+		XSSFWorkbook workbook = new XSSFWorkbook(file);
+		// Get first/desired sheet from the workbook
+		XSSFSheet sheet = workbook.getSheetAt(0);
+
+		//DataFormatter formatter = new DataFormatter();
+		int columnCount = 0;
+
+		// Iterate through each rows one by one
+		Iterator<Row> rowIterator = sheet.iterator();
+		rowIterator.next();
+		int rowCount = 0;
+		while (rowIterator.hasNext()) {
+			String[] values = new String[7];
+			columnCount = 0;
+			Row row = rowIterator.next();
+
+			// For each row, iterate through all the columns
+			Iterator<Cell> cellIterator = row.cellIterator();
+
+			for (; columnCount < 3; columnCount++) {
+				values[columnCount] = readStr(cellIterator,
+						rowCount, columnCount);
+			}
+
+			Date birthDate = readDate(cellIterator, rowCount,
+					columnCount);
+			columnCount++;
+
+			for (; columnCount < 7; columnCount++) {
+				values[columnCount] = readStr(cellIterator,
+						rowCount, columnCount);
+			}
+			User user = new User(values[0], values[1], PasswordGenerator.generatePassword(), 
+					values[2], values[5], values[6], values[4],  birthDate);
+
+			users.add(user);
+
+			System.out.println("");
+
+			rowCount++;
+		}
+		workbook.close();
+		file.close();
+		
 		return users;
 	}
 

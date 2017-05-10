@@ -80,13 +80,19 @@ public class ProposalsLiveHandler {
 		Proposal proposal = proposals
 				.get(receivedComment.getProposalId());
 
+		if (proposal == null) {
+			throw new RuntimeException(
+					"New Comment message received for unexisting proposal "
+							+ receivedComment.toString());
+		}
+
 		// Build a User with the provided information
 		User user = new User();
 		user.setId(receivedComment.getUserId());
 		user.setName(receivedComment.getUserName());
 
 		// Build a Comment
-		// This comment will be stored in the proposal comments collection 
+		// This comment will be stored in the proposal comments collection
 		new Comment(receivedComment.getContent(), user, proposal);
 
 		logger.info(

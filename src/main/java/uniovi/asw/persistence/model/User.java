@@ -106,7 +106,7 @@ public class User {
 	}
 
 	public void setDni(String dni) {
-		dni = dni;
+		this.dni = dni;
 	}
 
 	public String getAddress() {
