@@ -12,6 +12,7 @@ import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.repositories.CommentRepository;
 import uniovi.asw.persistence.repositories.ProposalRepository;
+import uniovi.asw.producers.KfkaProducer;
 import uniovi.asw.services.CommentService;
 
 @Service
@@ -19,10 +20,12 @@ public class CommentServiceImpl implements CommentService{
 
 	private CommentRepository repository;
 	private ProposalRepository proposalRepo;
+	private KfkaProducer producer;
 	
 	@Autowired
-	public CommentServiceImpl(CommentRepository repository) {
+	public CommentServiceImpl(CommentRepository repository, KfkaProducer producer) {
 		setRepository(repository);
+		this.producer = producer;
 	}
 
 	@Override
@@ -100,4 +103,11 @@ public class CommentServiceImpl implements CommentService{
     public void clearTable() {
         getRepository().deleteAll();
     }
+
+	@Override
+	public Comment makeComment(Comment comment) {
+		comment = getRepository().save(comment);
+		producer.sendComment(comment);
+		return comment;
+	}
 }

@@ -6,9 +6,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import uniovi.asw.persistence.model.Comment;
-
-public class CommentDeserializer implements Deserializer<Comment> {
+public class CommentMessageDeserializer implements Deserializer<CommentMessage> {
 
 	@Override
 	public void close() {
@@ -19,14 +17,14 @@ public class CommentDeserializer implements Deserializer<Comment> {
 	}
 
 	@Override
-	public Comment deserialize(String arg0, byte[] arg1) {
+	public CommentMessage deserialize(String arg0, byte[] arg1) {
 		ObjectMapper mapper = new ObjectMapper();
-		Comment proposal = null;
+		CommentMessage comment = null;
 		try {
-			proposal = mapper.readValue(arg1, Comment.class);
+			comment = mapper.readValue(arg1, CommentMessage.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return proposal;
+		return comment;
 	}
 }

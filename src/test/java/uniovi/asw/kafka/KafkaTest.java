@@ -19,6 +19,7 @@ import uniovi.asw.persistence.model.User;
 import uniovi.asw.persistence.model.Vote;
 import uniovi.asw.persistence.model.types.VoteType;
 import uniovi.asw.producers.KfkaProducer;
+import uniovi.asw.services.CommentService;
 import uniovi.asw.services.FillDatabase;
 import uniovi.asw.services.ProposalService;
 import uniovi.asw.services.UserService;
@@ -33,11 +34,13 @@ public abstract class KafkaTest {
 	@Autowired
 	protected ProposalService pS;
 	@Autowired
+	protected CommentService cS;
+	@Autowired
+	protected VoteService vS;
+	@Autowired
 	protected KfkaProducer producer;
 	@Autowired
 	private FillDatabase fillDatabase;
-	@Autowired
-	protected VoteService vS;
 
 	protected Set<String> expectedMessages;
 	protected Set<String> unexpectedMessages;

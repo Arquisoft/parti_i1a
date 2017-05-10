@@ -296,8 +296,7 @@ public class MainController {
                 p
         );
 
-        cService.save(comment);
-        //TODO kafkaProducer.send("createdComment", "created comment");
+        cService.makeComment(comment);
         return "redirect:/selectProposal/" + id;
     }
 

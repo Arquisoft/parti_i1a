@@ -26,6 +26,10 @@ public abstract class Votable {
     public Long getId() {
         return id;
     }
+    
+    public void setId(long id) {
+    	this.id = id;
+    }
 
     Set<Vote> _getVotes() {
         return votes;

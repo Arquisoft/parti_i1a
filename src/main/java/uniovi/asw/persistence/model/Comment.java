@@ -94,7 +94,7 @@ public class Comment extends Votable{
 
     @Override
     public String toString() {
-        return "Comment [content=" + content + ", user=" + user + ", proposal=" + proposal + ", created=" + created
+        return "Comment [content=" + content + ", user=" + user + ", proposal=" + proposal.getId() + ", created=" + created
                 + "]";
     }
 	

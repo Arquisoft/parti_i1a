@@ -7,18 +7,31 @@ import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.User;
 
 public interface CommentService {
-	
+
 	Comment save(Comment comment);
+
+	/**
+	 * Saves a comment and sends a Kafka notification
+	 * @param comment to save
+	 * @return saved comment
+	 */
+	Comment makeComment(Comment comment);
+
 	boolean checkExists(Long id);
+
 	List<Comment> findAll();
 
-    void delete(Comment comment);
+	void delete(Comment comment);
 
-    Comment findById(Long id);
-    List<Comment> findByUser(User user);
-    List<Comment> findByProposal(Proposal proposal);
-    Comment findByProposalAndId(Long proposalId, Long id);
+	Comment findById(Long id);
 
-    void updateComment(Long proposalId, Comment comment);
-    void clearTable();
+	List<Comment> findByUser(User user);
+
+	List<Comment> findByProposal(Proposal proposal);
+
+	Comment findByProposalAndId(Long proposalId, Long id);
+
+	void updateComment(Long proposalId, Comment comment);
+
+	void clearTable();
 }

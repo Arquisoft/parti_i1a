@@ -6,9 +6,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import uniovi.asw.persistence.model.Comment;
-
-public class CommentSerializer implements Serializer<Comment> {
+public class CommentMessageSerializer implements Serializer<CommentMessage> {
 
 	@Override
 	public void close() {
@@ -19,11 +17,12 @@ public class CommentSerializer implements Serializer<Comment> {
 	}
 
 	@Override
-	public byte[] serialize(String arg0, Comment arg1) {
+	public byte[] serialize(String arg0, CommentMessage comment) {
 		byte[] retVal = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			retVal = objectMapper.writeValueAsString(arg1).getBytes();
+			retVal = objectMapper.writeValueAsString(comment)
+					.getBytes();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

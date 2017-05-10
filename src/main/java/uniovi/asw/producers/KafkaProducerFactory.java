@@ -15,7 +15,8 @@ import org.springframework.kafka.core.ProducerFactory;
 import uniovi.asw.persistence.model.Proposal;
 import uniovi.asw.persistence.model.Comment;
 import uniovi.asw.serializers.ProposalSerializer;
-import uniovi.asw.serializers.CommentSerializer;
+import uniovi.asw.serializers.CommentMessage;
+import uniovi.asw.serializers.CommentMessageSerializer;
 
 @Configuration
 @EnableKafka
@@ -73,17 +74,17 @@ public class KafkaProducerFactory {
 
 	
 	@Bean
-	public KafkaTemplate<String, Comment> kafkaCommentTemplate() {
-		return new KafkaTemplate<String, Comment>(commentProducerFactory());
+	public KafkaTemplate<String, CommentMessage> kafkaCommentMessageTemplate() {
+		return new KafkaTemplate<String, CommentMessage>(commentMessageProducerFactory());
 	}
 
 	@Bean
-	public ProducerFactory<String, Comment> commentProducerFactory() {
-		return new DefaultKafkaProducerFactory<>(commentProducerConfigs());
+	public ProducerFactory<String, CommentMessage> commentMessageProducerFactory() {
+		return new DefaultKafkaProducerFactory<>(commentMessageProducerConfigs());
 	}
 
 	@Bean
-	public Map<String, Object> commentProducerConfigs() {
+	public Map<String, Object> commentMessageProducerConfigs() {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 		props.put(ProducerConfig.RETRIES_CONFIG, 0);
@@ -91,7 +92,7 @@ public class KafkaProducerFactory {
 		props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
 		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CommentSerializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CommentMessageSerializer.class);
 		return props;
 	}
 }

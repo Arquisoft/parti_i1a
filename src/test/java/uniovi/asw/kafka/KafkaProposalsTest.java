@@ -10,31 +10,41 @@ public class KafkaProposalsTest extends KafkaTest {
 
 	@Test
 	public void testMessages() throws Exception {
-		
+
 		User u1 = uS.findAll().get(0);
-		
-		Proposal p1 = new Proposal(u1, "Proposal 1", "None pizza", "POLITICS");
-		expectedMessages.add(p1.toString());
+
+		Proposal p1 = new Proposal(u1, "Proposal 1", "None pizza",
+				"POLITICS");
+		expectedMessages.add(getRelevantInfo(p1));
 		pS.makeProposal(p1);
-		
-		Proposal p2 = new Proposal(u1, "Proposal 2", "None pineapple", "SPORTS");
-		expectedMessages.add(p2.toString());
+
+		Proposal p2 = new Proposal(u1, "Proposal 2", "None pineapple",
+				"SPORTS");
+		expectedMessages.add(getRelevantInfo(p2));
 		pS.makeProposal(p2);
-		
+
 		expectedMessages.add("" + p1.getId());
 		pS.remove(p1);
-		
+
 		expectedMessages.add("" + p2.getId());
 		pS.remove(p2);
+
+		assertReceived();
 	}
 
-	@KafkaListener(topics = "newProposal")
-	public void listen(Proposal proposal) {
-		listen(proposal.toString());
+	@KafkaListener(topics = "newProposal", containerFactory = "kafkaProposalListenerContainerFactory")
+	public void listenNewProposal(Proposal proposal) {
+		listen(getRelevantInfo(proposal));
 	}
-	
+
 	@KafkaListener(topics = "deletedProposal")
-	public void listen(String message) {
+	public void listenDeletedProposal(String message) {
 		listen(message);
+	}
+
+	private String getRelevantInfo(Proposal proposal) {
+		return "Proposal [title=" + proposal.getTitle()
+				+ ", description=" + proposal.getDescription()
+				+ ", topic=" + proposal.getTopic() + "]";
 	}
 }
