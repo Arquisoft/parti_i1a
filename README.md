@@ -3,11 +3,9 @@
 [![codecov](https://codecov.io/gh/Arquisoft/dashboard_i1a/branch/master/graph/badge.svg)](https://codecov.io/gh/Arquisoft/dashboard_i1a)
 
 
-# participants0
+# Integration system
 
 [![Join the chat at https://gitter.im/Arquisoft/participants0](https://badges.gitter.im/Arquisoft/participants0.svg)](https://gitter.im/Arquisoft/participants0?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-Skeleton of participants module
 
 # Authors
 
@@ -15,3 +13,7 @@ Skeleton of participants module
 - Jorge López Alonso (@jlpza)
 - Julián García Murias (@jgm96)
 - Gonzalo Menéndez Borge (@MrSummat)
+- Sergio García Álvarez (@Macana)
+- Daniel Fernández Feito (@Daniff3)
+- Diego Roger Freijo Álvarez (@Diego-Roger)
+- Pablo García Ledo (@MessCoder)
