@@ -31,9 +31,11 @@ public class ProposalSteps {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 
+    // port 
     @Value("${local.server.port}")
     private int port;
 
+    // URL
     private URL base;
     private RestTemplate template;
 
@@ -49,6 +51,7 @@ public class ProposalSteps {
 	this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    // List of current created proposals
     @Given("^a list of proposals:$")
     public void a_list_of_proposals(List<Prop> proposals) throws Throwable {
 	for (Prop p : proposals) {
@@ -56,16 +59,19 @@ public class ProposalSteps {
 	}
     }
 
+    // Choose a proposal from the ones listed before
     @When("I enter in a proposal$")
     public void entring_proposal() throws Throwable {
 	LOG.debug("Entering a proposal");
     }
     
+    // Proposal view
     @Given("^I am redirected to its proposal view page$")
     public void redirection() throws Throwable {
 	LOG.debug("Entering a proposal");
     }
     
+    // See the proposal
     @Then("^I can see the \"([^\"]*)\"$")
     public void i_can_see(String text) throws Throwable {
 	LOG.debug("Checking text present: " + text);

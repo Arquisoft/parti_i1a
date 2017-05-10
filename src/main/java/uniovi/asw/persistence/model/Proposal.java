@@ -20,7 +20,6 @@ public class Proposal extends Votable {
 	private Date created;
 	@Enumerated(EnumType.STRING)
 	private Topic topic;
-	private String topicAux;
 
 	@ElementCollection
 	private Set<String> notAllowedWords = NotAllowedWords.getInstance().getSet();
@@ -51,10 +50,10 @@ public class Proposal extends Votable {
 		Association.MakeProposal.link(user, this);
 	}
 
-	public Proposal(User user, String tit, String desc, String topic) {
+	public Proposal(User user, String tit, String desc, Topic topic) {
 		this.title = tit;
 		this.description = desc;
-		setTopicAux(topic);
+		this.topic = topic;
 		this.minVotes = MinSupport.getInstance().getSupport();
 		this.setCreated(new Date());
 		this.comments = new HashSet<Comment>();
@@ -62,10 +61,10 @@ public class Proposal extends Votable {
 		Association.MakeProposal.link(user, this);
 	}
 
-	public Proposal(User user, String tit, String desc, String topic, int minSupport, Set<String> l) {
+	public Proposal(User user, String tit, String desc, Topic topic, int minSupport, Set<String> l) {
 		this.title = tit;
 		this.description = desc;
-		setTopicAux(topic);
+		this.topic = topic;
 		this.setCreated(new Date());
 		this.comments = new HashSet<Comment>();
 		this.minVotes = minSupport;
@@ -117,22 +116,6 @@ public class Proposal extends Votable {
 		this.user = user;
 	}
 
-	public String getTopicAux() {
-		return topicAux;
-	}
-
-	public void setTopicAux(String topicAux) {
-		this.topicAux = topicAux;
-		if (topicAux.equals("POLITICS"))
-			this.topic = Topic.POLITICS;
-		if (topicAux.equals("HEALTHCARE"))
-			this.topic = Topic.HEALTHCARE;
-		if (topicAux.equals("SECURITY"))
-			this.topic = Topic.SECURITY;
-		if (topicAux.equals("SPORTS"))
-			this.topic = Topic.SPORTS;
-	}
-
 	public boolean checkNotAllowedWords() {
 		for (String s : notAllowedWords) {
 			if (description.contains(s)) {
@@ -146,7 +129,7 @@ public class Proposal extends Votable {
 	@Override
 	public String toString() {
 		return "Proposal [title=" + title + ", description=" + description + ", minVotes=" + minVotes + ", topic="
-				+ topic + ", comments=" + comments + ", user=" + user + "]";
+				+ topic.name() + ", comments=" + comments + ", user=" + user + "]";
 	}
 
 	public Date getCreated() {

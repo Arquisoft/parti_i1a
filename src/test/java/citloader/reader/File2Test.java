@@ -8,7 +8,11 @@ import uniovi.asw.persistence.model.User;
 
 public class File2Test {
 
+	// Where the file is located
+	
 	private static final String PATH = "src/main/resources/test2.xlsx";
+	
+	// List of users tha will be compared with the ones read from the Excel file
 	private static final User[] USERS = {
 			UserBuilder.newUser("Pepe", "Garcia", "pepe@hotmail.com",
 					"1980-05-17", "A street", "Spanish", "58435551H"),
@@ -78,6 +82,9 @@ public class File2Test {
 					"1978-02-14", "Z street", "Spanish",
 					"35848874F"), };
 
+	
+	// Compares Users from the list with the ones that will be read form the Excel file
+	
 	@Test
 	public void testData() {
 		Reader reader = ReaderFactory.getReader();

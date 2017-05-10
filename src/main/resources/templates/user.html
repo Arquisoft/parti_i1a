@@ -1,83 +1,77 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Proposal list</title>
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous" />
-
-<!-- Latest compiled and minified JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous">
-	
-</script>
-</head>
-<body>
-	<div class="container-fluid">
-		<h1 align="center">Home</h1>
-		<div class="row">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<h3>Proposals</h3>
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>Title</th>
-							<th>Topic</th>
-							<th>Score</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="p : ${proposals}" th:id="${'proposal' + p.getId()}">
-							<td th:text="${p.getTitle()}"></td>
-							<td th:text="${p.getTopic()}"></td>
-							<td th:text="${p.calculateScore()}"></td>
-							<td><a th:href="${'/selectProposal/' + p.getId()}"
-								class="btn btn-block btn-info" th:id="${p.getId()}">See</a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col-md-1"></div>
-		</div>
-		<div class="col-md-1"></div>
-		<div class="col-md-5">
-			<h3>Create a proposal</h3>
-			<form role="form" th:action="@{/createProposal}"
-				th:object="${createProposal}" method="POST">
-				<div class="form-group">
-					<label for="title">Title: </label> <input type="text" id="title"
-						th:field="*{title}" class="form-control"
-						placeholder="Title of the proposal" />
-				</div>
-				<div class="form-group">
-					<label for="description">Description: </label>
-					<textarea class="form-control" rows="5" id="description"
-						th:field="*{description}"
-						placeholder="Description of your proposal"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="topic">Topic: </label>
-                    <select id="topic" th:field="*{topic}" class="form-control">
-						<option selected="true" value="base">Select a topic</option>
-						<option th:each="top:${topics}" th:value="${top}" th:text="${top}"
-							th:id="${top}"></option>
-					</select>
-				</div>
-
-				<button type="submit" class="btn btn-default" id="submit">Submit
-					proposal</button>
-			</form>
-		</div>
-		<div class="col-md-3"></div>
-	</div>
-</body>
+   <head>
+      <title>Proposal list</title>
+      <script
+         src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet"
+         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+         crossorigin="anonymous" />
+      <!-- Latest compiled and minified JavaScript -->
+      <script
+         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+         crossorigin="anonymous"></script>
+   </head>
+   <body>
+      <div class="container-fluid">
+         <h1 align="center">Home</h1>
+         <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+               <h3>Proposals</h3>
+               <table class="table table-bordered">
+                  <thead>
+                     <tr>
+                        <th>Title</th>
+                        <th>Topic</th>
+                        <th>Score</th>
+                        <th></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr th:each="p : ${proposals}" th:id="${'proposal' + p.getId()}">
+                        <td th:text="${p.getTitle()}"></td>
+                        <td th:text="${p.getTopic()}"></td>
+                        <td th:text="${p.calculateScore()}"></td>
+                        <td><a th:href="${'/selectProposal/' + p.getId()}"
+                           class="btn btn-block btn-info" th:id="${p.getId()}">See</a></td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <div class="col-md-1"></div>
+         </div>
+         <div class="col-md-1"></div>
+         <div class="col-md-5">
+            <h3>Create a proposal</h3>
+            <form role="form" th:action="@{/createProposal}"
+               th:object="${createProposal}" method="POST">
+               <div class="form-group">
+                  <label for="title">Title: </label> <input type="text" id="title"
+                     th:field="*{title}" class="form-control"
+                     placeholder="Title of the proposal" />
+               </div>
+               <div class="form-group">
+                  <label for="description">Description: </label>
+                  <textarea class="form-control" rows="5" id="description"
+                     th:field="*{description}"
+                     placeholder="Description of your proposal"></textarea>
+               </div>
+               <div class="form-group">
+                  <label for="topic">Topic: </label>
+                  <select id="topic" th:field="*{topic}" class="form-control">
+                     <option selected="true" value="base">Select a topic</option>
+                     <option th:each="top:${topics}" th:value="${top}" th:text="${top}"
+                        th:id="${top}"></option>
+                  </select>
+               </div>
+               <button type="submit" class="btn btn-default" id="submit">Submit
+               proposal</button>
+            </form>
+         </div>
+         <div class="col-md-3"></div>
+      </div>
+   </body>
 </html>

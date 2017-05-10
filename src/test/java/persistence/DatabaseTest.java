@@ -136,6 +136,8 @@ public class DatabaseTest {
 		initializeComments();
 	}
 	
+	// Create Users
+	
 	private void initializeUsers() {
 		u1 = new User("Gonzalo", "Menéndez Borge", "contraseña1", "mail1", "Spain", "1111", "Address1", new Date(2500000));
 		u2 = new User("Jorge", "López Alonso", "contraseña2", "mail2", "Spain", "2222", "Address2", new Date());
@@ -143,6 +145,8 @@ public class DatabaseTest {
 		u4 = new User("Sergio", "Mosquera Dopico", "contraseña4", "mail4", "Spain", "4444", "Address4", new Date());
 	}
 
+	// Create Proposals
+	
 	private void initializeProposals() {
 		p1 = new Proposal(u1, "Let me return to Ireland", "I was happy there and my friend Ortin is still there");
 		p2 = new Proposal(u2, "Take SDI easier", "We think that this subject is so hard");
@@ -152,6 +156,8 @@ public class DatabaseTest {
 				"Is horrible when you have to wait an hour for the bus because the ASW presentations took too long");
 	}
 
+	// Create Comments
+	
 	private void initializeComments() {
 		c1 = new Comment("Gonzalo you can't leave us yet, we still have another ASW deliverable", u2, p1);
 		c2 = new Comment("Jorge leave that and let's go eating a slice of spanish tortilla on San Fernando", u3, p2);
@@ -159,6 +165,8 @@ public class DatabaseTest {
 		c4 = new Comment("You Piedrasblancas people always complaining...", u1, p4);
 	}
 
+	// Save Users
+	
 	private void addUsers() {
 		uS.save(u1);
 		uS.save(u2);
@@ -166,6 +174,8 @@ public class DatabaseTest {
 		uS.save(u4);
 	}
 
+	// Save Proposals
+	
 	private void addProposals() {
 		pS.save(p1);
 		pS.save(p2);
@@ -173,6 +183,8 @@ public class DatabaseTest {
 		pS.save(p4);
 	}
 
+	// Save Comments
+	
 	private void addComments() {
 		cS.save(c1);
 		cS.save(c2);
@@ -180,6 +192,8 @@ public class DatabaseTest {
 		cS.save(c4);
 	}
 
+	// Asigning each proposal to a user
+	
 	private void makeProposals() {
 		u1.makeProposal(p1);
 		u2.makeProposal(p2);
@@ -187,6 +201,8 @@ public class DatabaseTest {
 		u1.makeProposal(p4);
 	}
 
+	// Asigning a comment to a user and a proposal
+	
 	private void comments() {
 		u1.comment(p1, c1);
 		u1.comment(p2, c2);
@@ -196,6 +212,8 @@ public class DatabaseTest {
 		u3.comment(p3, c3);
 	}
 
+	// Voting proposals
+	
 	@SuppressWarnings("unused")
 	private void vote() {
 		Vote v1=new Vote(u1, p1, VoteType.POSITIVE);		
