@@ -29,10 +29,10 @@ public class LetterTest {
 
 	@Test
 	public void testWrite() {
-		letter.write(user);
+		String path = letter.write(user);
 		
 		try {
-			BufferedReader bf = new BufferedReader(new FileReader("generatedFiles/1.txt"));
+			BufferedReader bf = new BufferedReader(new FileReader(path));
 			String line = bf.readLine();
 			assertTrue(line.equals("Su registro se ha procesado con éxito. "
 					+ "Procederemos a enviarle un correo. Su correo es: " + user.getEmail()
@@ -41,11 +41,9 @@ public class LetterTest {
 			bf.close();
 			
 		} catch (FileNotFoundException e) {
-			assertTrue(false);
-			System.out.println("No se encontró el archivo");
+			assertTrue("No se encontró el archivo", false);
 		} catch (IOException e) {
-			assertTrue(false);
-			System.out.println("Ha habido un problema leyendo del archivo");
+			assertTrue("Ha habido un problema leyendo del archivo", false);
 		}
 	}
 

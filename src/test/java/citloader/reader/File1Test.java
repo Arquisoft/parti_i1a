@@ -3,7 +3,6 @@ package citloader.reader;
 import org.junit.Test;
 
 import uniovi.asw.citizensloader.reader.Reader;
-import uniovi.asw.citizensloader.reader.ReaderFactory;
 import uniovi.asw.persistence.model.User;
 
 
@@ -15,7 +14,7 @@ import uniovi.asw.persistence.model.User;
  */
 public class File1Test {
 
-	private static final String PATH = "src/main/resources/test.xlsx";
+	private static final String PATH = "src/test/resources/test.xlsx";
 	private static final User[] USERS = { UserBuilder.newUser("Juan",
 			"Torres Pardo", "juan@example.com", "1985-10-10",
 			"C/ Federico García Lorca 2", "Español", "90500084Y"),

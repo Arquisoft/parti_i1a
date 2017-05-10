@@ -1,4 +1,4 @@
-package uniovi.asw.kafka;
+package kafkaTests;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

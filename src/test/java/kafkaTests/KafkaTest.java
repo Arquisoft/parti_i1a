@@ -1,4 +1,4 @@
-package uniovi.asw.kafka;
+package kafkaTests;
 
 import java.util.Collections;
 import java.util.HashSet;

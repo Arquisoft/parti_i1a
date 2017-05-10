@@ -1,4 +1,4 @@
-package ccmber.steps;
+package hello.cucumber.steps;
 
 import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

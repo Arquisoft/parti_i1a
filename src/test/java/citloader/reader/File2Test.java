@@ -3,14 +3,13 @@ package citloader.reader;
 import org.junit.Test;
 
 import uniovi.asw.citizensloader.reader.Reader;
-import uniovi.asw.citizensloader.reader.ReaderFactory;
 import uniovi.asw.persistence.model.User;
 
 public class File2Test {
 
 	// Where the file is located
 	
-	private static final String PATH = "src/main/resources/test2.xlsx";
+	private static final String PATH = "src/test/resources/test2.xlsx";
 	
 	// List of users tha will be compared with the ones read from the Excel file
 	private static final User[] USERS = {

@@ -1,4 +1,4 @@
-package ccmber.steps;
+package hello.cucumber.steps;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,11 +37,11 @@ public class LiveSteps {
   protected int port;
 
   
-  @When("^the client calls /$")
+  @When("^the client calls /admin$")
   public void the_client_calls() throws Throwable {
     Assert.notNull(context);
     this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
-    result = mvc.perform(get("/")).andReturn();
+    result = mvc.perform(get("/admin")).andReturn();
   }
 //admin
   @Then("^the client receives status code of (\\d+)$")

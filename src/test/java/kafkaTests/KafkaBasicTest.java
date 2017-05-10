@@ -1,4 +1,4 @@
-package uniovi.asw.kafka;
+package kafkaTests;
 
 import org.junit.Test;
 import org.springframework.kafka.annotation.KafkaListener;

@@ -13,7 +13,7 @@ import uniovi.asw.persistence.model.User;
 public class TxtLetter implements Letter {
 
 	@Override
-	public void write(User u) {
+	public String write(User u) {
 		BufferedWriter file;
 
 		String filename = "generatedFiles\\" + u.getDni() + "_"
@@ -33,6 +33,7 @@ public class TxtLetter implements Letter {
 							+ "\n Cause: " + e.getMessage());
 		}
 
+		return filename;
 	}
 
 }
