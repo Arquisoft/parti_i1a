@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import uniovi.asw.persistence.model.*;
+import uniovi.asw.persistence.model.types.Topic;
 import uniovi.asw.persistence.model.types.VoteType;
 
 import javax.annotation.PostConstruct;
@@ -78,11 +79,11 @@ public class FillDatabase {
     }
 
 	private void initializeProposals() {
-		p1 = new Proposal(u1, "Title1", "Description1", "HEALTHCARE");
-		p2 = new Proposal(u2, "Title2", "Description2", "ENVIROMENT");
-		p3 = new Proposal(u3, "Title3", "Description3", "POLITICS");
-		p4 = new Proposal(u4, "Title4", "Description4", "SECURITY");
-		p5 = new Proposal(u4, "Title5", "Description5", "SPORTS");
+		p1 = new Proposal(u1, "Title1", "Description1", Topic.valueOf("HEALTHCARE"));
+		p2 = new Proposal(u2, "Title2", "Description2", Topic.valueOf("ENVIROMENT"));
+		p3 = new Proposal(u3, "Title3", "Description3", Topic.valueOf("POLITICS"));
+		p4 = new Proposal(u4, "Title4", "Description4", Topic.valueOf("SECURITY"));
+		p5 = new Proposal(u4, "Title5", "Description5", Topic.valueOf("SPORTS"));
 		addProposals();
 	}
 

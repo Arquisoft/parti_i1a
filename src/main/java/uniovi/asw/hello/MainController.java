@@ -12,11 +12,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import uniovi.asw.persistence.model.Comment;
@@ -38,27 +40,22 @@ public class MainController {
 	private List<SseEmitter> sseEmitters = Collections.synchronizedList(new ArrayList<>());
 
 	@Autowired
-    private ProposalService pService;
+	private ProposalService pService;
 
-    @Autowired
-    private VoteService vService;
+	@Autowired
+	private VoteService vService;
 
-    @Autowired
-    private CommentService cService;
+	@Autowired
+	private CommentService cService;
 
 	@Autowired
 	private UserService uService;
 
-//	@Autowired
-//	private ProposalsLiveHandler proposals;
+	// @Autowired
+	// private ProposalsLiveHandler proposals;
 
-	@RequestMapping("/")
+	@GetMapping("/admin")
 	public String landing() {
-		return "redirect:/login";
-	}
-	
-	@RequestMapping("/admin")
-	public String admin() {
 		LOGGER.debug("Redirected to live page");
 		return "admin";
 	}
@@ -77,59 +74,60 @@ public class MainController {
 		LOGGER.debug("Redirected to view proposal");
 		return "viewProposal";
 	}
-/**
-	@ModelAttribute("proposals")
-	public Map<Long, Proposal> getProposals() {
-		return proposals.getMap();
-	}
 
-	public List<SseEmitter> getSseEmitters() {
-		return sseEmitters;
-	}
-
-	public void setSseEmitters(List<SseEmitter> sseEmitters) {
-		this.sseEmitters = sseEmitters;
-	}
-*/
+	/**
+	 * @ModelAttribute("proposals") public Map<Long, Proposal> getProposals() {
+	 * return proposals.getMap(); }
+	 * 
+	 * public List<SseEmitter> getSseEmitters() { return sseEmitters; }
+	 * 
+	 * public void setSseEmitters(List<SseEmitter> sseEmitters) {
+	 * this.sseEmitters = sseEmitters; }
+	 */
 	// Login from participants
 
-	@RequestMapping("/login")
+	@RequestMapping({ "/login", "/" })
 	public String login(Model model) {
 		model.addAttribute("loginUser", new User());
 		return "login";
 	}
 
 	@RequestMapping("/loginCheck")
-	public String handleLogin(Model model, @ModelAttribute User loginUser, HttpServletRequest request) {
+	public ModelAndView handleLogin(Model model, @ModelAttribute User loginUser, HttpServletRequest request) {
 		String email = loginUser.getEmail();
 		String pass = loginUser.getPassword();
 
 		User user = uService.findByEmail(email);
-
+		if (user == null)
+			user = (User) request.getSession().getAttribute("user");
 		if (user.getPassword().equals(pass)) {
 			model.addAttribute("user", user);
 			request.getSession().setAttribute("user", user);
 
-			if( user.isAdmin() )
-                return "admin";
-            else
-    			return "user_info";
+			if (user.isAdmin())
+				return new ModelAndView("redirect:/admin");
+			else
+				return new ModelAndView("redirect:/user_info");
 		} else {
 			model.addAttribute("loginUser", new User());
-			return "login";
+			return new ModelAndView("redirect:/login");
 		}
+
 	}
 
 	@RequestMapping("/user_info")
 	public String getUserInfo(Model model) {
 
-        User user = getSessionUser();
+		User user = getSessionUser();
+//		user = (User) model.asMap().get("user");
 
 		if (user == null || user.getId() == null) {
 			model.addAttribute("loginUser", new User());
 			return "login";
-		} else
+		} else{
+			model.addAttribute("user", user);
 			return "user_info";
+		}
 	}
 
 	// Change pasword from participants
@@ -137,7 +135,7 @@ public class MainController {
 	@RequestMapping("/change_password")
 	public String changePassword(Model model) {
 
-        User user = getSessionUser();
+		User user = getSessionUser();
 
 		if (user == null || user.getId() == null) {
 			model.addAttribute("credentials", new UserCredentials());
@@ -182,197 +180,193 @@ public class MainController {
 		return "user_info";
 	}
 
-    @RequestMapping("/see_proposals")
-    public String user(Model model) {
-        model.addAttribute("createProposal", new Proposal());
-        return "user";
-    }
+	@RequestMapping("/see_proposals")
+	public String user(Model model) {
+		model.addAttribute("createProposal", new Proposal());
+		return "user";
+	}
 
-    @RequestMapping("/createProposal")
-    public String createProposal(Model model, @ModelAttribute Proposal createProposal) {
+	@RequestMapping("/createProposal")
+	public ModelAndView createProposal(Model model, @ModelAttribute Proposal createProposal) {
+		
+		model.asMap().get("user");
 
-        User user = getSessionUser();
+		User user = getSessionUser();
 
-        Proposal proposal = new Proposal(
-                user,
-                createProposal.getTitle(),
-                createProposal.getDescription(),
-                createProposal.getTopicAux()
-        );
+		Proposal proposal = new Proposal(user, createProposal.getTitle(), createProposal.getDescription(),
+				createProposal.getTopic());
 
-        if (proposal.checkNotAllowedWords()) {
-            pService.makeProposal(proposal);
-        }
+		if (proposal.checkNotAllowedWords()) {
+			pService.makeProposal(proposal);
+		}
 
-        return "redirect:/user";
-    }
+		return new ModelAndView("redirect:/user");
+	}
+	
+	@RequestMapping("/user")
+	public ModelAndView redirectUser(Model model){
+		return new ModelAndView("redirect:/see_proposals");
+	}
 
-    @RequestMapping("/deleteProposal/{id}")
-    public String deleteProposal(Model model, @PathVariable("id") Long id) {
-        Proposal p = pService.findById(id);
-        pService.remove(p);
-        return "redirect:/admin";
-    }
+	@RequestMapping("/deleteProposal/{id}")
+	public String deleteProposal(Model model, @PathVariable("id") Long id) {
+		Proposal p = pService.findById(id);
+		pService.remove(p);
+		return "redirect:/admin";
+	}
 
-    @RequestMapping("/selectProposal/{id}")
-    public String selectProposal(Model model, @PathVariable Long id) {
-        model.addAttribute("p", pService.findById(id));
-        model.addAttribute("createComment", new Comment());
-        return "proposal";
-    }
+	@RequestMapping("/selectProposal/{id}")
+	public String selectProposal(Model model, @PathVariable Long id) {
+		model.addAttribute("p", pService.findById(id));
+		model.addAttribute("createComment", new Comment());
+		return "proposal";
+	}
 
-    @RequestMapping("/admin/selectProposal/{id}")
-    public String selectProposalAdmin(Model model, @PathVariable Long id) {
-        model.addAttribute("p", pService.findById(id));
-        model.addAttribute("createComment", new Comment());
-        return "admin_proposal";
-    }
-    
-    @RequestMapping("/upvoteProposal/{id}")
-    public String upvoteProposal(Model model, @PathVariable("id") Long id) {
+	@RequestMapping("/admin/selectProposal/{id}")
+	public String selectProposalAdmin(Model model, @PathVariable Long id) {
+		model.addAttribute("p", pService.findById(id));
+		model.addAttribute("createComment", new Comment());
+		return "admin_proposal";
+	}
 
-        User user = getSessionUser();
-        Proposal prop = pService.findById(id);
+	@RequestMapping("/upvoteProposal/{id}")
+	public String upvoteProposal(Model model, @PathVariable("id") Long id) {
 
-        if (prop != null && user != null) {
-            Vote v = vService.findVoteByUserByVotable(user, prop);
+		User user = getSessionUser();
+		Proposal prop = pService.findById(id);
 
-            if(v != null) {
-                vService.undoVote(v);
+		if (prop != null && user != null) {
+			Vote v = vService.findVoteByUserByVotable(user, prop);
 
-                if (v.getVoteType() != VoteType.POSITIVE) {
-                    v = new Vote(user, prop, VoteType.POSITIVE);
-                    vService.makeVote(v);
-                }
-            }
-            else{
-                v = new Vote(user, prop, VoteType.POSITIVE);
-                vService.makeVote(v);
-            }
+			if (v != null) {
+				vService.undoVote(v);
 
-            pService.save(prop);
-        }
+				if (v.getVoteType() != VoteType.POSITIVE) {
+					v = new Vote(user, prop, VoteType.POSITIVE);
+					vService.makeVote(v);
+				}
+			} else {
+				v = new Vote(user, prop, VoteType.POSITIVE);
+				vService.makeVote(v);
+			}
 
-        return "redirect:/selectProposal/" + id;
-    }
+			pService.save(prop);
+		}
 
-    @RequestMapping("/downvoteProposal/{id}")
-    public String downvoteProposal(Model model, @PathVariable("id") Long id) {
+		return "redirect:/selectProposal/" + id;
+	}
 
-	    User user = getSessionUser();
-        Proposal prop = pService.findById(id);
+	@RequestMapping("/downvoteProposal/{id}")
+	public String downvoteProposal(Model model, @PathVariable("id") Long id) {
 
-        if (prop != null && user != null) {
-            Vote v = vService.findVoteByUserByVotable(user, prop);
+		User user = getSessionUser();
+		Proposal prop = pService.findById(id);
 
-            if(v != null) {
-                vService.undoVote(v);
+		if (prop != null && user != null) {
+			Vote v = vService.findVoteByUserByVotable(user, prop);
 
-                if (v.getVoteType() != VoteType.NEGATIVE) {
-                    v = new Vote(user, prop, VoteType.NEGATIVE);
-                    vService.makeVote(v);
-                }
-            }
-            else{
-                v = new Vote(user, prop, VoteType.NEGATIVE);
-                vService.makeVote(v);
-            }
+			if (v != null) {
+				vService.undoVote(v);
 
-            pService.save(prop);
-        }
+				if (v.getVoteType() != VoteType.NEGATIVE) {
+					v = new Vote(user, prop, VoteType.NEGATIVE);
+					vService.makeVote(v);
+				}
+			} else {
+				v = new Vote(user, prop, VoteType.NEGATIVE);
+				vService.makeVote(v);
+			}
 
-        return "redirect:/selectProposal/" + id;
-    }
+			pService.save(prop);
+		}
 
-    @RequestMapping("/createComment/{id}")
-    public String commentProposal(Model model, @PathVariable("id") Long id, @ModelAttribute Comment createComment) {
+		return "redirect:/selectProposal/" + id;
+	}
 
-	    User user = getSessionUser();
-        Proposal p = pService.findById(id);
+	@RequestMapping("/createComment/{id}")
+	public String commentProposal(Model model, @PathVariable("id") Long id, @ModelAttribute Comment createComment) {
 
-        Comment comment = new Comment(
-                createComment.getContent(),
-                user,
-                p
-        );
+		User user = getSessionUser();
+		Proposal p = pService.findById(id);
 
-        cService.save(comment);
-        //TODO kafkaProducer.send("createdComment", "created comment");
-        return "redirect:/selectProposal/" + id;
-    }
+		Comment comment = new Comment(createComment.getContent(), user, p);
 
-    @RequestMapping("/upvoteComment/{proposalId}/{id}")
-    public String upvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id){
+		cService.save(comment);
+		// TODO kafkaProducer.send("createdComment", "created comment");
+		return "redirect:/selectProposal/" + id;
+	}
 
-	    User user = getSessionUser();
-        Comment c = cService.findByProposalAndId(proposalId, id);
+	@RequestMapping("/upvoteComment/{proposalId}/{id}")
+	public String upvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id) {
 
-        if (c != null && user != null) {
-            Vote v = vService.findVoteByUserByVotable(user, c);
+		User user = getSessionUser();
+		Comment c = cService.findByProposalAndId(proposalId, id);
 
-            if(v != null) {
-                vService.undoVote(v);
+		if (c != null && user != null) {
+			Vote v = vService.findVoteByUserByVotable(user, c);
 
-                if( v.getVoteType() != VoteType.POSITIVE){
-                    v = new Vote(user, c, VoteType.POSITIVE);
-                    vService.makeVote(v);
-                }
-            }
-            else{
-                v = new Vote(user, c, VoteType.POSITIVE);
-                vService.makeVote(v);
-            }
+			if (v != null) {
+				vService.undoVote(v);
 
-            cService.updateComment(proposalId, c);
-        }
+				if (v.getVoteType() != VoteType.POSITIVE) {
+					v = new Vote(user, c, VoteType.POSITIVE);
+					vService.makeVote(v);
+				}
+			} else {
+				v = new Vote(user, c, VoteType.POSITIVE);
+				vService.makeVote(v);
+			}
 
-        return "redirect:/selectProposal/" + proposalId;
-    }
+			cService.updateComment(proposalId, c);
+		}
 
-    @RequestMapping("/downvoteComment/{proposalId}/{id}")
-    public String downvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id){
+		return "redirect:/selectProposal/" + proposalId;
+	}
 
-        User user = getSessionUser();
-        Comment c = cService.findByProposalAndId(proposalId, id);
+	@RequestMapping("/downvoteComment/{proposalId}/{id}")
+	public String downvoteComment(Model model, @PathVariable("proposalId") Long proposalId,
+			@PathVariable("id") Long id) {
 
-        if (c != null && user != null) {
-            Vote v = vService.findVoteByUserByVotable(user, c);
+		User user = getSessionUser();
+		Comment c = cService.findByProposalAndId(proposalId, id);
 
-            if(v != null) {
-                vService.undoVote(v);
+		if (c != null && user != null) {
+			Vote v = vService.findVoteByUserByVotable(user, c);
 
-                if(v.getVoteType() != VoteType.NEGATIVE) {
-                    v = new Vote(user, c, VoteType.NEGATIVE);
-                    vService.makeVote(v);
-                }
-            }
-            else{
-                v = new Vote(user, c, VoteType.NEGATIVE);
-                vService.makeVote(v);
-            }
+			if (v != null) {
+				vService.undoVote(v);
 
-            cService.updateComment(proposalId, c);
-        }
+				if (v.getVoteType() != VoteType.NEGATIVE) {
+					v = new Vote(user, c, VoteType.NEGATIVE);
+					vService.makeVote(v);
+				}
+			} else {
+				v = new Vote(user, c, VoteType.NEGATIVE);
+				vService.makeVote(v);
+			}
 
-        return "redirect:/selectProposal/" + proposalId;
-    }
+			cService.updateComment(proposalId, c);
+		}
 
-    @ModelAttribute("proposals")
-    public List<Proposal> proposals() {
-        return pService.findAll();
-    }
+		return "redirect:/selectProposal/" + proposalId;
+	}
 
-    @ModelAttribute("topics")
-    public Topic[] topics() {
-        return Topic.values();
-    }
+	@ModelAttribute("proposals")
+	public List<Proposal> proposals() {
+		return pService.findAll();
+	}
 
-	private User getSessionUser(){
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession sesion = attr.getRequest().getSession(true); // true ==
-                                                                    // allow
-                                                                    // create
-        return (User) sesion.getAttribute("user");
-    }
+	@ModelAttribute("topics")
+	public Topic[] topics() {
+		return Topic.values();
+	}
+
+	private User getSessionUser() {
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		HttpSession sesion = attr.getRequest().getSession(true); // true ==
+																	// allow
+																	// create
+		return (User) sesion.getAttribute("user");
+	}
 
 }

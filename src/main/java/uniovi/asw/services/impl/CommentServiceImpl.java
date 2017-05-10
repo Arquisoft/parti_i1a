@@ -18,6 +18,7 @@ import uniovi.asw.services.CommentService;
 public class CommentServiceImpl implements CommentService{
 
 	private CommentRepository repository;
+	@Autowired
 	private ProposalRepository proposalRepo;
 	
 	@Autowired
